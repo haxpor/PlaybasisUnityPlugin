@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using System;
 using System.Collections;
 using System.Runtime.InteropServices;
+using AOT;
 
 public class TestPlugin : MonoBehaviour {
 
@@ -18,15 +19,13 @@ public class TestPlugin : MonoBehaviour {
 
 		debugText.text = "iOS";
 
-		String getOneText = "Result is " + PlaybasisWrapper.getOne();
 		String versionText = "Playbasis Version is " + PlaybasisWrapper.version();
 
-		Debug.Log(getOneText);
 		Debug.Log(versionText);
 
-		debugText.text = getOneText + "\n" + versionText;
+		debugText.text = versionText;
 
-		PlaybasisWrapper.auth("1012718250", "a52097fc5a17cb0d8631d20eacd2d9c2", "io.wasin.testplugin");
+		PlaybasisWrapper.auth("1012718250", "a52097fc5a17cb0d8631d20eacd2d9c2", "io.wasin.testplugin", OnAuthResult);
 		
 		#elif UNITY_ANDROID
 
@@ -42,5 +41,18 @@ public class TestPlugin : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 	
+	}
+
+	[MonoPInvokeCallback(typeof(PlaybasisWrapper.OnResultDelegate))]
+	private static void OnAuthResult(bool success)
+	{
+		if (success)
+		{
+			Debug.Log("OnAuthResult succeeded");
+		}
+		else
+		{
+			Debug.Log("OnAuthResult failed");
+		}
 	}
 }

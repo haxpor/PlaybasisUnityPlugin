@@ -21,16 +21,39 @@ char* MakeStringCopy (const char* string)
 	return res;
 }
 
-int _getOne() {
-	return 1;
-}
-
+/*
+	Fields and methods exposed by Playbasis class.
+*/
 const char* _version() {
 	return MakeStringCopy([[Playbasis version] UTF8String]);
 }
 
-void _auth(const char* apikey, const char* apisecret, const char* bundleId) {
+const char* _token() {
+	return MakeStringCopy([[Playbasis sharedPB].token UTF8String]);
+}
+
+DLL void _auth(const char* apikey, const char* apisecret, const char* bundleId, OnResult callback) {
 	[[Playbasis sharedPB] authWithApiKey:CreateNSString(apikey) apiSecret:CreateNSString(apisecret) bundleId:CreateNSString(bundleId) andBlock:^(PBAuth_Response *auth, NSURL *url, NSError *error) {
-        NSLog(@"%@", auth);
+       	if (error == nil)
+       	{
+       		NSLog(@"%@", auth);
+
+       		if (callback)
+       		{
+       			NSLog(@"Call callback(true) on auth()");
+       			callback(true);
+       		}
+       	}
+       	else
+       	{
+       		NSLog(@"Failed in calling auth()");
+
+       		// callback with failure
+       		if (callback)
+       		{
+       			NSLog(@"Call callback(false) on auth()");
+       			callback(false);
+       		}
+       	}
     }];
 }

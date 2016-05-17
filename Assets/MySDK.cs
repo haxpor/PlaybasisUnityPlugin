@@ -1,6 +1,8 @@
 using UnityEngine;
+using System;
 using System.Collections;
 using System.Runtime.InteropServices;
+using AOT;
 
 public class PlaybasisWrapper : MonoBehaviour {
 	#if UNITY_ANDROID
@@ -42,30 +44,31 @@ public class PlaybasisWrapper : MonoBehaviour {
 	#endif
 
 	#if UNITY_IOS
-	/* Interface to native implementations */
-	[DllImport ("__Internal")]
-	private static extern int _getOne();
 
+	/* Interface to native implementations */
+	/*
+		Callback methods.
+	*/
+	public delegate void OnResultDelegate(bool success);
+
+	/*
+		Playbasis class
+	*/
 	[DllImport ("__Internal")]
 	private static extern string _version();
 
 	[DllImport ("__Internal")]
-	private static extern void _auth(string apikey, string apisecret, string bundleId);
-
-	/* Public interface for use inside C# / JS Code */
-	public static int getOne()
-	{
-		return _getOne() + 1;
-	}
+	private static extern void _auth(string apikey, string apisecret, string bundleId, OnResultDelegate callback);
 
 	public static string version()
 	{
 		return _version();
 	}
 
-	public static void auth(string apikey, string apisecret, string bundleId)
+	public static void auth(string apikey, string apisecret, string bundleId, OnResultDelegate callback)
 	{
-		_auth(apikey, apisecret, bundleId);
+		_auth(apikey, apisecret, bundleId, callback);
 	}
+
 	#endif
 }
