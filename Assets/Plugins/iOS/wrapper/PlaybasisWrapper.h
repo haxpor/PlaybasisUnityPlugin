@@ -13,6 +13,8 @@ extern "C" {
 		Callback via data.
 		If data is null, then there's error thus you should check error integer.
 		Otherwise, ignore error integer.
+
+		User should manually cast returned opaque data to appropriate type.
 	*/
 	typedef void (* OnDataResult)(void*, int);
 
@@ -25,6 +27,7 @@ extern "C" {
 	void _auth(const char* apikey, const char* apisecret, const char* bundleId, OnResult callback);
 	void _renew(const char* apikey, const char* apisecret, OnResult callback);
 	void _playerPublic(const char* playerId, OnDataResult callback);
+	void _player(const char* playerId, OnDataResult callback);
 
 #ifdef __cplusplus
 }

@@ -1,2 +1,8 @@
-Temp/*
-Library/*
+# OS X only
+.DS_Store
+*.swp
+*.Trashes
+
+# All platforms
+Temp
+Library

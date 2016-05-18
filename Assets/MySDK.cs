@@ -64,6 +64,9 @@ public class PlaybasisWrapper : MonoBehaviour {
 	[DllImport ("__Internal")]
 	private static extern void _playerPublic(string playerId, OnDataResultDelegate callback);
 
+	[DllImport ("__Internal")]
+	private static extern void _player(string playerId, OnDataResultDelegate callback);
+
 	/*
 		Structs
 	*/
@@ -87,6 +90,13 @@ public class PlaybasisWrapper : MonoBehaviour {
 		public long lastLogout;
 	};
 
+	[StructLayout(LayoutKind.Sequential)]
+	public struct playerWr {
+		public playerPublicWr playerPublic;
+		public string email;
+		public string phoneNumber;
+	}
+
 	/*
 		All implementation of api methods are non-blocking call, but synchronized call for Playbasis Platform.
 	*/
@@ -108,6 +118,11 @@ public class PlaybasisWrapper : MonoBehaviour {
 	public static void playerPublic(string playerId, OnDataResultDelegate callback)
 	{
 		_playerPublic(playerId, callback);
+	}
+
+	public static void player(string playerId, OnDataResultDelegate callback)
+	{
+		_player(playerId, callback);
 	}
 
 	#endif

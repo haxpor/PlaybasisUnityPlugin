@@ -38,6 +38,12 @@ typedef struct _playerPublic {
 	time_t lastLogout;
 } playerPublic;
 
+typedef struct _player {
+	playerPublic playerPublic;
+	char* email;
+	char* phoneNumber;
+} player;
+
 #ifdef __cplusplus
 }
 #endif

@@ -21,6 +21,7 @@ public class TestPlugin : MonoBehaviour {
 
 		if (!Application.isEditor)
 		{
+		/** iOS **/
 		#if UNITY_IOS
 
 		debugText.text = "iOS";
@@ -33,6 +34,7 @@ public class TestPlugin : MonoBehaviour {
 
 		PlaybasisWrapper.auth("1012718250", "a52097fc5a17cb0d8631d20eacd2d9c2", "io.wasin.testplugin", OnAuthResult);
 		
+		/** ANDROID **/
 		#elif UNITY_ANDROID
 
 		TestPlugin.sharedInstance().debugText.text = "Android";
@@ -65,7 +67,8 @@ public class TestPlugin : MonoBehaviour {
 
 	private void ContinueFromAuth()
 	{
-		PlaybasisWrapper.playerPublic("jontestuser", OnPlayerPublicResult);	
+		//PlaybasisWrapper.playerPublic("jontestuser", OnPlayerPublicResult);
+		PlaybasisWrapper.player("jontestuser", OnPlayerResult);
 	}
 
 	[MonoPInvokeCallback(typeof(PlaybasisWrapper.OnDataResultDelegate))]
@@ -74,18 +77,41 @@ public class TestPlugin : MonoBehaviour {
 		if (result != IntPtr.Zero)
 		{
 			PlaybasisWrapper.playerPublicWr pp = (PlaybasisWrapper.playerPublicWr)Marshal.PtrToStructure(result, typeof(PlaybasisWrapper.playerPublicWr));
-			Debug.Log("Player FirstName: " + pp.basic.firstName);
-			Debug.Log("Player Username: " + pp.basic.userName);
-			Debug.Log("Player exp: " + pp.basic.exp);
-			Debug.Log("Player LastName: " + pp.basic.lastName);
-			Debug.Log("Player clPlayerId: " + pp.basic.clPlayerId);
-			Debug.Log("Player registered: " + pp.registered);
-			Debug.Log("Player lastLogin: " + pp.lastLogin);
-			Debug.Log("Player lastLogout: " + pp.lastLogout);
+			Debug.Log("PlayerPublic FirstName: " + pp.basic.firstName);
+			Debug.Log("PlayerPublic Username: " + pp.basic.userName);
+			Debug.Log("PlayerPublic exp: " + pp.basic.exp);
+			Debug.Log("PlayerPublic LastName: " + pp.basic.lastName);
+			Debug.Log("PlayerPublic clPlayerId: " + pp.basic.clPlayerId);
+			Debug.Log("PlayerPublic registered: " + pp.registered);
+			Debug.Log("PlayerPublic lastLogin: " + pp.lastLogin);
+			Debug.Log("PlayerPublic lastLogout: " + pp.lastLogout);
 		}
 		else
 		{
 			Debug.Log("Error with errorCode " + errorCode);
+		}
+	}
+
+	[MonoPInvokeCallback(typeof(PlaybasisWrapper.OnDataResultDelegate))]
+	private void OnPlayerResult(IntPtr result, int errorCode)
+	{
+		if (result != IntPtr.Zero)
+		{
+			PlaybasisWrapper.playerWr pp = (PlaybasisWrapper.playerWr)Marshal.PtrToStructure(result, typeof(PlaybasisWrapper.playerWr));
+			Debug.Log("Player email " + pp.email);
+			Debug.Log("Player phoneNumber " + pp.phoneNumber);
+			Debug.Log("|_ PlayerPublic FirstName: " + pp.playerPublic.basic.firstName);
+			Debug.Log("|_ PlayerPublic Username: " + pp.playerPublic.basic.userName);
+			Debug.Log("|_ PlayerPublic exp: " + pp.playerPublic.basic.exp);
+			Debug.Log("|_ PlayerPublic LastName: " + pp.playerPublic.basic.lastName);
+			Debug.Log("|_ PlayerPublic clPlayerId: " + pp.playerPublic.basic.clPlayerId);
+			Debug.Log("|_ PlayerPublic registered: " + pp.playerPublic.registered);
+			Debug.Log("|_ PlayerPublic lastLogin: " + pp.playerPublic.lastLogin);
+			Debug.Log("|_ PlayerPublic lastLogout: " + pp.playerPublic.lastLogout);
+		}
+		else
+		{
+			Debug.Log("player api error with code " + errorCode);
 		}
 	}
 }
