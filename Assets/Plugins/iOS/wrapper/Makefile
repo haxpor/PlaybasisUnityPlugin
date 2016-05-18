@@ -1,5 +1,5 @@
 # Makefile to compile or check syntax of wrapper, and its tester class
-CC=clang
+CC=clang++
 
 FRAMEWORKS=-framework Foundation
 FRAMEWORKS+=-framework UIKit
@@ -17,8 +17,8 @@ SOURCE2=PlaybasisWrapperTester.mm
 LIBB=../
 LIBINCLUDE=-I../ -I../ui -I../libs/Reachability/ -I../libs/KLCPopup/ -I../libs/MBProgressHUD/ -I../libs/RNCryptor/
 
-CFLAGS1=$(LIBINCLUDE) -arch i386 -Wall -Werror -g -v -ObjC -c $(SOURCE1) -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator9.3.sdk -std=gnu99
-CFLAGS2=$(LIBINCLUDE) -arch i386 -Wall -Werror -g -v -ObjC -c $(SOURCE2) -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator9.3.sdk -std=gnu99
+CFLAGS1=$(LIBINCLUDE) -arch i386 -Wall -Werror -g -v -c $(SOURCE1) -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator9.3.sdk -std=c++11
+CFLAGS2=$(LIBINCLUDE) -arch i386 -Wall -Werror -g -v -c $(SOURCE2) -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator9.3.sdk -std=c++11
 LDFLAGS=$(LIBRARIES) $(FRAMEWORKS)
 OUTNAME1=PlaybasisWrapper.o
 OUTNAME2=PlaybasisWrapperTester.o

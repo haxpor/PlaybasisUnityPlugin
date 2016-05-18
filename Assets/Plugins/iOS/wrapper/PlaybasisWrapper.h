@@ -1,13 +1,20 @@
+#include "PlaybasisResponsesWrapper.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-	static const int AUTH_API_TAG = 1;
+	/*
+		Callback via result status
+	*/
+	typedef void (* OnResult)(bool);
 
 	/*
-		Callback data type
+		Callback via data.
+		If data is null, then there's error thus you should check error integer.
+		Otherwise, ignore error integer.
 	*/
-	typedef void (* OnResult)(_Bool);
+	typedef void (* OnDataResult)(void*, int);
 
 	/*
 		List of fields and exposed methods from Playbasis class.
@@ -17,6 +24,7 @@ extern "C" {
 
 	void _auth(const char* apikey, const char* apisecret, const char* bundleId, OnResult callback);
 	void _renew(const char* apikey, const char* apisecret, OnResult callback);
+	void _playerPublic(const char* playerId, OnDataResult callback);
 
 #ifdef __cplusplus
 }

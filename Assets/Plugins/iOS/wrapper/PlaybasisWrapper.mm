@@ -78,3 +78,53 @@ void _renew(const char* apikey, const char* apisecret, OnResult callback) {
 		}
 	}];
 }
+
+void _playerPublic(const char* playerId, OnDataResult callback) {
+	[[Playbasis sharedPB] playerPublicAsync:CreateNSString(playerId) withBlock:^(PBPlayerPublic_Response *playerResponse, NSURL *url, NSError *error) {
+		if (error == nil)
+		{
+			playerPublic data;
+            if (playerResponse.playerBasic.image != nil &&
+                playerResponse.playerBasic.image != (id)[NSNull null])
+                data.basic.image = MakeStringCopy([playerResponse.playerBasic.image UTF8String]);
+            
+            if (playerResponse.playerBasic.userName != nil &&
+                playerResponse.playerBasic.userName != (id)[NSNull null])
+                data.basic.userName = MakeStringCopy([playerResponse.playerBasic.userName UTF8String]);
+            
+            data.basic.exp = playerResponse.playerBasic.exp;
+            data.basic.level = playerResponse.playerBasic.level;
+            
+            if (playerResponse.playerBasic.firstName != nil &&
+                playerResponse.playerBasic.firstName != (id)[NSNull null])
+                data.basic.firstName = MakeStringCopy([playerResponse.playerBasic.firstName UTF8String]);
+            
+            if (playerResponse.playerBasic.lastName != nil &&
+                playerResponse.playerBasic.lastName != (id)[NSNull null])
+                data.basic.lastName = MakeStringCopy([playerResponse.playerBasic.lastName UTF8String]);
+            
+            data.basic.gender = playerResponse.playerBasic.gender;
+            
+            if (playerResponse.playerBasic.clPlayerId != nil &&
+                playerResponse.playerBasic.clPlayerId != (id)[NSNull null])
+                data.basic.clPlayerId = MakeStringCopy([playerResponse.playerBasic.clPlayerId UTF8String]);
+            
+
+			data.registered = [playerResponse.registered timeIntervalSince1970];
+			data.lastLogin = [playerResponse.lastLogin timeIntervalSince1970];
+			data.lastLogout = [playerResponse.lastLogout timeIntervalSince1970];
+
+			if (callback)
+			{
+				callback((void*)&data, -1);
+			}
+		}
+		else
+		{
+			if (callback)
+			{
+				callback(nil, (int)error.code);
+			}
+		}
+	}];
+}

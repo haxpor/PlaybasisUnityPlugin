@@ -9,8 +9,14 @@ public class TestPlugin : MonoBehaviour {
 
 	public Text debugText;
 
+	private TestPlugin()
+	{
+
+	}
+
 	// Use this for initialization
 	void Start () {
+
 		debugText.text = "Empty for now ...";
 
 		if (!Application.isEditor)
@@ -29,7 +35,7 @@ public class TestPlugin : MonoBehaviour {
 		
 		#elif UNITY_ANDROID
 
-		debugText.text = "Android";
+		TestPlugin.sharedInstance().debugText.text = "Android";
 
 		PlaybasisWrapper.init();
 		PlaybasisWrapper.initPlaybasis();
@@ -49,10 +55,37 @@ public class TestPlugin : MonoBehaviour {
 		if (success)
 		{
 			Debug.Log("OnAuthResult succeeded");
+			ContinueFromAuth();
 		}
 		else
 		{
 			Debug.Log("OnAuthResult failed");
+		}
+	}
+
+	private static void ContinueFromAuth()
+	{
+		PlaybasisWrapper.playerPublic("jontestuser", OnPlayerPublicResult);	
+	}
+
+	[MonoPInvokeCallback(typeof(PlaybasisWrapper.OnDataResultDelegate))]
+	private static void OnPlayerPublicResult(IntPtr result, int errorCode)
+	{
+		if (result != IntPtr.Zero)
+		{
+			PlaybasisWrapper.playerPublicWr pp = (PlaybasisWrapper.playerPublicWr)Marshal.PtrToStructure(result, typeof(PlaybasisWrapper.playerPublicWr));
+			Debug.Log("Player FirstName: " + pp.basic.firstName);
+			Debug.Log("Player Username: " + pp.basic.userName);
+			Debug.Log("Player exp: " + pp.basic.exp);
+			Debug.Log("Player LastName: " + pp.basic.lastName);
+			Debug.Log("Player clPlayerId: " + pp.basic.clPlayerId);
+			Debug.Log("Player registered: " + pp.registered);
+			Debug.Log("Player lastLogin: " + pp.lastLogin);
+			Debug.Log("Player lastLogout: " + pp.lastLogout);
+		}
+		else
+		{
+			Debug.Log("Error with errorCode " + errorCode);
 		}
 	}
 }
