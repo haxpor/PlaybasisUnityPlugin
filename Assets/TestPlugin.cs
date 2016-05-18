@@ -50,7 +50,7 @@ public class TestPlugin : MonoBehaviour {
 	}
 
 	[MonoPInvokeCallback(typeof(PlaybasisWrapper.OnResultDelegate))]
-	private static void OnAuthResult(bool success)
+	private void OnAuthResult(bool success)
 	{
 		if (success)
 		{
@@ -63,13 +63,13 @@ public class TestPlugin : MonoBehaviour {
 		}
 	}
 
-	private static void ContinueFromAuth()
+	private void ContinueFromAuth()
 	{
 		PlaybasisWrapper.playerPublic("jontestuser", OnPlayerPublicResult);	
 	}
 
 	[MonoPInvokeCallback(typeof(PlaybasisWrapper.OnDataResultDelegate))]
-	private static void OnPlayerPublicResult(IntPtr result, int errorCode)
+	private void OnPlayerPublicResult(IntPtr result, int errorCode)
 	{
 		if (result != IntPtr.Zero)
 		{
