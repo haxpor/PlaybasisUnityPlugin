@@ -60,6 +60,9 @@ public class PlaybasisWrapper : MonoBehaviour {
 	[DllImport ("__Internal")]
 	private static extern void _auth(string apikey, string apisecret, string bundleId, OnResultDelegate callback);
 
+	[DllImport ("__Internal")]
+	private static extern void _renew(string apikey, string apisecret, OnResultDelegate callback);
+
 	public static string version()
 	{
 		return _version();
@@ -68,6 +71,11 @@ public class PlaybasisWrapper : MonoBehaviour {
 	public static void auth(string apikey, string apisecret, string bundleId, OnResultDelegate callback)
 	{
 		_auth(apikey, apisecret, bundleId, callback);
+	}
+
+	public static void renew(string apikey, string apisecret, OnResultDelegate callback)
+	{
+		_renew(apikey, apisecret, callback);
 	}
 
 	#endif

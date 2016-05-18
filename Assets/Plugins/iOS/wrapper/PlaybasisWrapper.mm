@@ -32,8 +32,8 @@ const char* _token() {
 	return MakeStringCopy([[Playbasis sharedPB].token UTF8String]);
 }
 
-DLL void _auth(const char* apikey, const char* apisecret, const char* bundleId, OnResult callback) {
-	[[Playbasis sharedPB] authWithApiKey:CreateNSString(apikey) apiSecret:CreateNSString(apisecret) bundleId:CreateNSString(bundleId) andBlock:^(PBAuth_Response *auth, NSURL *url, NSError *error) {
+void _auth(const char* apikey, const char* apisecret, const char* bundleId, OnResult callback) {
+	[[Playbasis sharedPB] authWithApiKeyAsync:CreateNSString(apikey) apiSecret:CreateNSString(apisecret) bundleId:CreateNSString(bundleId) andBlock:^(PBAuth_Response *auth, NSURL *url, NSError *error) {
        	if (error == nil)
        	{
        		NSLog(@"%@", auth);
@@ -56,4 +56,25 @@ DLL void _auth(const char* apikey, const char* apisecret, const char* bundleId, 
        		}
        	}
     }];
+}
+
+void _renew(const char* apikey, const char* apisecret, OnResult callback) {
+	[[Playbasis sharedPB] renewWithApiKeyAsync:CreateNSString(apikey) apiSecret:CreateNSString(apisecret) andBlock:^(PBAuth_Response* auth, NSURL* url, NSError *error) {
+		if (error == nil)
+		{
+			NSLog(@"%@", auth);
+
+			if (callback)
+			{
+				callback(true);
+			}
+		}
+		else
+		{
+			if (callback)
+			{
+				callback(false);
+			}
+		}
+	}];
 }
