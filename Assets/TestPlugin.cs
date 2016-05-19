@@ -52,6 +52,32 @@ public class TestPlugin : MonoBehaviour {
 	}
 
 	[MonoPInvokeCallback(typeof(PlaybasisWrapper.OnResultDelegate))]
+	private void OnLogoutResult(bool success)
+	{
+		if (success)
+		{
+			Debug.Log("Logout succeeded");
+		}
+		else
+		{
+			Debug.Log("Logout failed");
+		}
+	}
+
+	[MonoPInvokeCallback(typeof(PlaybasisWrapper.OnResultDelegate))]
+	private void OnLoginResult(bool success)
+	{
+		if (success)
+		{
+			Debug.Log("Login succeeded");
+		}
+		else
+		{
+			Debug.Log("Login failed");
+		}
+	}
+
+	[MonoPInvokeCallback(typeof(PlaybasisWrapper.OnResultDelegate))]
 	private void OnAuthResult(bool success)
 	{
 		if (success)
@@ -67,8 +93,11 @@ public class TestPlugin : MonoBehaviour {
 
 	private void ContinueFromAuth()
 	{
-		//PlaybasisWrapper.playerPublic("jontestuser", OnPlayerPublicResult);
+		// Add test code calling api here ...
+		PlaybasisWrapper.login("jontestuser", OnLoginResult);
+		PlaybasisWrapper.playerPublic("jontestuser", OnPlayerPublicResult);
 		PlaybasisWrapper.player("jontestuser", OnPlayerResult);
+		PlaybasisWrapper.logout("jontestuser", OnLogoutResult);
 	}
 
 	[MonoPInvokeCallback(typeof(PlaybasisWrapper.OnDataResultDelegate))]

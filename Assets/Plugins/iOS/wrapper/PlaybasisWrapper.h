@@ -26,8 +26,12 @@ extern "C" {
 
 	void _auth(const char* apikey, const char* apisecret, const char* bundleId, OnResult callback);
 	void _renew(const char* apikey, const char* apisecret, OnResult callback);
+	void _login(const char* playerId, OnResult callback);
+	void _logout(const char* playerId, OnResult callack);
+	void _register(const char* playerId, const char* userName, const char* email, const char* imageUrl, OnResult callback);
 	void _playerPublic(const char* playerId, OnDataResult callback);
 	void _player(const char* playerId, OnDataResult callback);
+	void _pointOfPlayer(const char* playerId, const char* pointName, OnDataResult callback);
 
 #ifdef __cplusplus
 }

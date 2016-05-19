@@ -62,6 +62,15 @@ public class PlaybasisWrapper : MonoBehaviour {
 	private static extern void _renew(string apikey, string apisecret, OnResultDelegate callback);
 
 	[DllImport ("__Internal")]
+	private static extern void _login(string playerId, OnResultDelegate callback);
+
+	[DllImport ("__Internal")]
+	private static extern void _logout(string playerId, OnResultDelegate callback);
+
+	[DllImport ("__Internal")]
+	private static extern void _register(string playerId, string userName, string email, string imageUrl, OnResultDelegate callback);
+
+	[DllImport ("__Internal")]
 	private static extern void _playerPublic(string playerId, OnDataResultDelegate callback);
 
 	[DllImport ("__Internal")]
@@ -113,6 +122,21 @@ public class PlaybasisWrapper : MonoBehaviour {
 	public static void renew(string apikey, string apisecret, OnResultDelegate callback)
 	{
 		_renew(apikey, apisecret, callback);
+	}
+
+	public static void login(string playerId, OnResultDelegate callback)
+	{
+		_login(playerId, callback);
+	}
+
+	public static void logout(string playerId, OnResultDelegate callback)
+	{
+		_logout(playerId, callback);
+	}
+
+	public static void register(string playerId, string userName, string email, string imageUrl, OnResultDelegate callback)
+	{
+		_register(playerId, userName, email, imageUrl, callback);
 	}
 
 	public static void playerPublic(string playerId, OnDataResultDelegate callback)

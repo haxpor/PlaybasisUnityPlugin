@@ -141,6 +141,69 @@ void _renew(const char* apikey, const char* apisecret, OnResult callback) {
 	}];
 }
 
+void _login(const char* playerId, OnResult callback)
+{
+	[[Playbasis sharedPB] loginPlayerAsync:CreateNSString(playerId) withBlock:^(PBResultStatus_Response* result, NSURL* url, NSError *error) {
+		if (error == nil)
+		{
+			NSLog(@"%@", result);
+
+			if (callback)
+			{
+				callback(true);
+			}
+		}
+		else
+		{
+			if (callback)
+			{
+				callback(false);
+			}
+		}
+	}];
+}
+
+void _logout(const char* playerId, OnResult callback)
+{
+	[[Playbasis sharedPB] logoutPlayer:CreateNSString(playerId) withBlock:^(PBResultStatus_Response* result, NSURL* url, NSError *error) {
+		if (error == nil)
+		{
+			NSLog(@"%@", result);
+
+			if (callback)
+			{
+				callback(true);
+			}
+		}
+		else
+		{
+			if (callback)
+			{
+				callback(false);
+			}
+		}
+	}];
+}
+
+void _register(const char* playerId, const char* userName, const char* email, const char* imageUrl, OnResult callback)
+{
+	[[Playbasis sharedPB] registerUserWithPlayerIdAsync:CreateNSString(playerId) username:CreateNSString(userName) email:CreateNSString(email) imageUrl:CreateNSString(imageUrl) andBlock:^(PBResultStatus_Response* result, NSURL* url, NSError *error) {
+		if (error == nil)
+		{
+			NSLog(@"Registered a new user successfully.");
+
+			callback(true);
+		}
+		else
+		{
+			if (callback)
+			{
+				callback(false);
+			}
+		}
+	}];
+}
+
 void _playerPublic(const char* playerId, OnDataResult callback) {
 	[[Playbasis sharedPB] playerPublicAsync:CreateNSString(playerId) withBlock:^(PBPlayerPublic_Response *playerResponse, NSURL *url, NSError *error) {
 		if (error == nil)
@@ -182,6 +245,20 @@ void _player(const char* playerId, OnDataResult callback)
 			{
 				callback(nil, (int)error.code);
 			}
+		}
+	}];
+}
+
+void _pointOfPlayer(const char* playerId, const char* pointName, OnDataResult callback)
+{
+	[[Playbasis sharedPB] pointOfPlayerAsync:CreateNSString(playerId) forPoint:CreateNSString(pointName) withBlock:^(PBPoint_Response * points, NSURL *url, NSError *error) {
+		if (error == nil)
+		{
+			
+		}
+		else
+		{
+			
 		}
 	}];
 }
