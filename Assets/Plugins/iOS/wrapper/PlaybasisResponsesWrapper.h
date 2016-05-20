@@ -1,5 +1,5 @@
 #include <string>
-#include <vector>
+#include <cstdlib>
 
 using std::string;
 
@@ -58,10 +58,10 @@ typedef struct _player {
 
 	~_player()
 	{
-		/*if (email)
+		if (email)
 			free(email);
 		if (phoneNumber)
-			free(phoneNumber);*/
+			free(phoneNumber);
 	}
 } player;
 
@@ -72,10 +72,10 @@ typedef struct _point {
 
 	~_point()
 	{
-		/*if (rewardId)
+		if (rewardId)
             free(rewardId);
 		if (rewardName)
-			free(rewardName);*/
+			free(rewardName);
 	}
 } point;
 

@@ -1,6 +1,5 @@
 ﻿#import "PlaybasisWrapper.h"
 #import "Playbasis.h" // your actual iOS library header
-#include <vector>
 
 #define CHECK_NOTNULL(x) x != nil && x != (id)[NSNull null]
 
@@ -96,20 +95,18 @@ void PopulateData(pbResponseType type, PBBase_Response *response, void* outData)
 			{
 				if (pt != nil)
 				{
-					point p;
-
 					if (CHECK_NOTNULL(pt.rewardId))
 					{
-						p.rewardId = MakeStringCopy([pt.rewardId UTF8String]);
+						items[i].rewardId = MakeStringCopy([pt.rewardId UTF8String]);
 					}
 
 					if (CHECK_NOTNULL(pt.rewardName))
 					{
-						p.rewardName = MakeStringCopy([pt.rewardName UTF8String]);
+						items[i].rewardName = MakeStringCopy([pt.rewardName UTF8String]);
 					}
 
-					p.value = pt.value;
-                    items[i++] = p;
+					items[i].value = pt.value;
+					i++;
 				}
 			}
 
