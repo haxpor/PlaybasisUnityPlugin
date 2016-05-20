@@ -151,10 +151,9 @@ public class TestPlugin : MonoBehaviour {
 		if (result != IntPtr.Zero)
 		{
 			PlaybasisWrapper.pointRWr p = (PlaybasisWrapper.pointRWr)Marshal.PtrToStructure(result, typeof(PlaybasisWrapper.pointRWr));
-			PlaybasisWrapper.pointWr[] data = p.pointArray.data;
 
 			Debug.Log("PointOfPlayer count " + p.pointArray.count);
-			Debug.Log("PointOfPlayer [0] " + data[0].rewardName);
+			Debug.Log("PointOfPlayer [0] " + p.pointArray.data[0].rewardName);
 		}
 		else
 		{
