@@ -1,7 +1,8 @@
 ﻿#import "PlaybasisWrapper.h"
 #import "Playbasis.h" // your actual iOS library header
+#include <vector>
 
-#define CHECK_NULL(x) x != nil && x != (id)[NSNull null]
+#define CHECK_NOTNULL(x) x != nil && x != (id)[NSNull null]
 
 // Converts C style string to NSString
 NSString* CreateNSString (const char* string)
@@ -71,14 +72,49 @@ void PopulateData(pbResponseType type, PBBase_Response *response, void* outData)
 			PopulateData(responseType_playerPublic, cr.playerPublic, &(data->playerPublic));
 		}
 
-		if (CHECK_NULL(cr.email))
+		if (CHECK_NOTNULL(cr.email))
 		{
 			data->email = MakeStringCopy([cr.email UTF8String]);
 		}
 
-		if (CHECK_NULL(cr.phoneNumber))
+		if (CHECK_NOTNULL(cr.phoneNumber))
 		{
 			data->phoneNumber = MakeStringCopy([cr.phoneNumber UTF8String]);
+		}
+	}
+	else if (type == responseType_point)
+	{
+		PBPoint_Response* cr = (PBPoint_Response*)response;
+
+		pointR* data = (pointR*)outData;
+		if (cr.point != nil && [cr.point count] > 0)
+		{
+			std::vector<point> *items = new std::vector<point>();
+
+			for (PBPoint* pt in cr.point)
+			{
+				if (pt != nil)
+				{
+					point p;
+
+					if (CHECK_NOTNULL(pt.rewardId))
+					{
+						p.rewardId = MakeStringCopy([pt.rewardId UTF8String]);
+					}
+
+					if (CHECK_NOTNULL(pt.rewardName))
+					{
+						p.rewardName = MakeStringCopy([pt.rewardName UTF8String]);
+					}
+
+					p.value = pt.value;
+					items->push_back(p);
+				}
+			}
+
+			// set result to data
+			data->pointArray.data = (point*)items->data();
+			data->pointArray.count = items->size();
 		}
 	}
 }
@@ -254,11 +290,20 @@ void _pointOfPlayer(const char* playerId, const char* pointName, OnDataResult ca
 	[[Playbasis sharedPB] pointOfPlayerAsync:CreateNSString(playerId) forPoint:CreateNSString(pointName) withBlock:^(PBPoint_Response * points, NSURL *url, NSError *error) {
 		if (error == nil)
 		{
-			
+			pointR data;
+			PopulateData(responseType_point, points, &data);
+
+			if (callback)
+			{
+				callback((void*)&data, -1);
+			}
 		}
 		else
 		{
-			
+			if (callback)
+			{
+				callback(nil, (int)error.code);
+			}
 		}
 	}];
 }

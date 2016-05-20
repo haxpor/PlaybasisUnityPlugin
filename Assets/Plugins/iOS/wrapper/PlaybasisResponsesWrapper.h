@@ -6,6 +6,11 @@ using std::string;
 extern "C" {
 #endif
 
+typedef struct _array {
+	void* data;
+	int count;
+} array;
+
 typedef struct _playerBasic {
 	char* image;
 	char* userName;
@@ -43,6 +48,16 @@ typedef struct _player {
 	char* email;
 	char* phoneNumber;
 } player;
+
+typedef struct _point {
+	char* rewardId;
+	char* rewardName;
+	unsigned int value;
+} point;
+
+typedef struct _pointR {
+	array pointArray;
+} pointR;
 
 #ifdef __cplusplus
 }

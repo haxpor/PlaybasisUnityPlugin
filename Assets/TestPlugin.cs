@@ -98,6 +98,7 @@ public class TestPlugin : MonoBehaviour {
 		PlaybasisWrapper.playerPublic("jontestuser", OnPlayerPublicResult);
 		PlaybasisWrapper.player("jontestuser", OnPlayerResult);
 		PlaybasisWrapper.logout("jontestuser", OnLogoutResult);
+		PlaybasisWrapper.pointOfPlayer("jontestuser", "point", OnPointOfPlayerResult);
 	}
 
 	[MonoPInvokeCallback(typeof(PlaybasisWrapper.OnDataResultDelegate))]
@@ -141,6 +142,23 @@ public class TestPlugin : MonoBehaviour {
 		else
 		{
 			Debug.Log("player api error with code " + errorCode);
+		}
+	}
+
+	[MonoPInvokeCallback(typeof(PlaybasisWrapper.OnDataResultDelegate))]
+	private void OnPointOfPlayerResult(IntPtr result, int errorCode) 
+	{
+		if (result != IntPtr.Zero)
+		{
+			PlaybasisWrapper.pointRWr p = (PlaybasisWrapper.pointRWr)Marshal.PtrToStructure(result, typeof(PlaybasisWrapper.pointRWr));
+			PlaybasisWrapper.pointWr[] data = p.pointArray.data;
+
+			Debug.Log("PointOfPlayer count " + p.pointArray.count);
+			Debug.Log("PointOfPlayer [0] " + data[0].rewardName);
+		}
+		else
+		{
+			Debug.Log("pointOfPlayer api error with code " + errorCode);
 		}
 	}
 }
