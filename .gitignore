@@ -3,6 +3,9 @@
 *.swp
 *.Trashes
 
+# iOS, ignore the testing project folder (with this name only)
+XCodeProject1
+
 # All platforms
 Temp
 Library

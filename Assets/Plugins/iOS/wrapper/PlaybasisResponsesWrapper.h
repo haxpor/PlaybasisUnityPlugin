@@ -1,38 +1,46 @@
 #include <string>
+#include <vector>
 
 using std::string;
+
+template <typename T>
+struct _array {
+	T* data=NULL;
+	int count;
+
+	~_array()
+	{
+		if (data)
+			delete[] data;
+	}
+};
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-typedef struct _array {
-	void* data;
-	int count;
-} array;
-
 typedef struct _playerBasic {
-	char* image;
-	char* userName;
+	char* image=NULL;
+	char* userName=NULL;
 	unsigned int exp;
 	unsigned int level;
-	char* firstName;
-	char* lastName;
+	char* firstName=NULL;
+	char* lastName=NULL;
 	unsigned int gender;
-	char* clPlayerId;
+	char* clPlayerId=NULL;
 
 	~_playerBasic()
 	{
 		if (image)
-			delete image;
+			free(image);
 		if (userName)
-			delete userName;
+			free(userName);
 		if (firstName)
-			delete firstName;
+			free(firstName);
 		if (lastName)
-			delete lastName;
+			free(lastName);
 		if (clPlayerId)
-			delete clPlayerId;
+			free(clPlayerId);
 	}
 } playerBasic;
 
@@ -45,18 +53,34 @@ typedef struct _playerPublic {
 
 typedef struct _player {
 	playerPublic playerPublic;
-	char* email;
-	char* phoneNumber;
+	char* email=NULL;
+	char* phoneNumber=NULL;
+
+	~_player()
+	{
+		/*if (email)
+			free(email);
+		if (phoneNumber)
+			free(phoneNumber);*/
+	}
 } player;
 
 typedef struct _point {
-	char* rewardId;
-	char* rewardName;
+	char* rewardId=NULL;
+	char* rewardName=NULL;
 	unsigned int value;
+
+	~_point()
+	{
+		/*if (rewardId)
+            free(rewardId);
+		if (rewardName)
+			free(rewardName);*/
+	}
 } point;
 
 typedef struct _pointR {
-	array pointArray;
+	_array<point> pointArray;
 } pointR;
 
 #ifdef __cplusplus

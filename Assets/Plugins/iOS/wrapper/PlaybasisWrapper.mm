@@ -89,7 +89,8 @@ void PopulateData(pbResponseType type, PBBase_Response *response, void* outData)
 		pointR* data = (pointR*)outData;
 		if (cr.point != nil && [cr.point count] > 0)
 		{
-			std::vector<point> *items = new std::vector<point>();
+			point *items = new point[[cr.point count]];
+			int i=0;
 
 			for (PBPoint* pt in cr.point)
 			{
@@ -108,13 +109,13 @@ void PopulateData(pbResponseType type, PBBase_Response *response, void* outData)
 					}
 
 					p.value = pt.value;
-					items->push_back(p);
+                    items[i++] = p;
 				}
 			}
 
 			// set result to data
-			data->pointArray.data = (point*)items->data();
-			data->pointArray.count = items->size();
+			data->pointArray.data = (point*)items;
+			data->pointArray.count = i;
 		}
 	}
 }
@@ -290,12 +291,14 @@ void _pointOfPlayer(const char* playerId, const char* pointName, OnDataResult ca
 	[[Playbasis sharedPB] pointOfPlayerAsync:CreateNSString(playerId) forPoint:CreateNSString(pointName) withBlock:^(PBPoint_Response * points, NSURL *url, NSError *error) {
 		if (error == nil)
 		{
-			pointR data;
+            pointR data;
 			PopulateData(responseType_point, points, &data);
 
 			if (callback)
 			{
 				callback((void*)&data, -1);
+
+
 			}
 		}
 		else
