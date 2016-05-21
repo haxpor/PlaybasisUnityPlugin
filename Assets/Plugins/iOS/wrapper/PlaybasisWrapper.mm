@@ -294,8 +294,6 @@ void _pointOfPlayer(const char* playerId, const char* pointName, OnDataResult ca
 			if (callback)
 			{
 				callback((void*)&data, -1);
-
-
 			}
 		}
 		else

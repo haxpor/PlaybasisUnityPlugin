@@ -9,6 +9,11 @@ public class TestPlugin : MonoBehaviour {
 
 	public Text debugText;
 
+	#if UNITY_IOS
+	private static PlaybasisWrapper.playerWr playerInfo;
+	private static PlaybasisWrapper.pointRWr playerPointRInfo;
+	#endif
+
 	private TestPlugin()
 	{
 
@@ -48,11 +53,28 @@ public class TestPlugin : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	
+		if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began) {
+
+            // check data returned from api
+			Debug.Log("Player email " + playerInfo.email);
+			Debug.Log("Player phoneNumber " + playerInfo.phoneNumber);
+			Debug.Log("|_ PlayerPublic FirstName: " + playerInfo.playerPublic.basic.firstName);
+			Debug.Log("|_ PlayerPublic Username: " + playerInfo.playerPublic.basic.userName);
+			Debug.Log("|_ PlayerPublic exp: " + playerInfo.playerPublic.basic.exp);
+			Debug.Log("|_ PlayerPublic LastName: " + playerInfo.playerPublic.basic.lastName);
+			Debug.Log("|_ PlayerPublic clPlayerId: " + playerInfo.playerPublic.basic.clPlayerId);
+			Debug.Log("|_ PlayerPublic registered: " + playerInfo.playerPublic.registered);
+			Debug.Log("|_ PlayerPublic lastLogin: " + playerInfo.playerPublic.lastLogin);
+			Debug.Log("|_ PlayerPublic lastLogout: " + playerInfo.playerPublic.lastLogout);
+
+			Debug.Log("PointOfPlayer count " + playerPointRInfo.pointArray.count);
+			Debug.Log("PointOfPlayer [0] " + playerPointRInfo.pointArray.data[0].rewardName);
+        }
 	}
 
+	#if UNITY_IOS
 	[MonoPInvokeCallback(typeof(PlaybasisWrapper.OnResultDelegate))]
-	private void OnLogoutResult(bool success)
+	private static void OnLogoutResult(bool success)
 	{
 		if (success)
 		{
@@ -65,7 +87,7 @@ public class TestPlugin : MonoBehaviour {
 	}
 
 	[MonoPInvokeCallback(typeof(PlaybasisWrapper.OnResultDelegate))]
-	private void OnLoginResult(bool success)
+	private static void OnLoginResult(bool success)
 	{
 		if (success)
 		{
@@ -78,7 +100,7 @@ public class TestPlugin : MonoBehaviour {
 	}
 
 	[MonoPInvokeCallback(typeof(PlaybasisWrapper.OnResultDelegate))]
-	private void OnAuthResult(bool success)
+	private static void OnAuthResult(bool success)
 	{
 		if (success)
 		{
@@ -91,18 +113,19 @@ public class TestPlugin : MonoBehaviour {
 		}
 	}
 
-	private void ContinueFromAuth()
+	private static void ContinueFromAuth()
 	{
 		// Add test code calling api here ...
 		PlaybasisWrapper.login("jontestuser", OnLoginResult);
-		PlaybasisWrapper.playerPublic("jontestuser", OnPlayerPublicResult);
+		//PlaybasisWrapper.playerPublic("jontestuser", OnPlayerPublicResult);
 		PlaybasisWrapper.player("jontestuser", OnPlayerResult);
-		PlaybasisWrapper.logout("jontestuser", OnLogoutResult);
 		PlaybasisWrapper.pointOfPlayer("jontestuser", "point", OnPointOfPlayerResult);
+
+		//PlaybasisWrapper.logout("jontestuser", OnLogoutResult);
 	}
 
 	[MonoPInvokeCallback(typeof(PlaybasisWrapper.OnDataResultDelegate))]
-	private void OnPlayerPublicResult(IntPtr result, int errorCode)
+	private static void OnPlayerPublicResult(IntPtr result, int errorCode)
 	{
 		if (result != IntPtr.Zero)
 		{
@@ -123,11 +146,15 @@ public class TestPlugin : MonoBehaviour {
 	}
 
 	[MonoPInvokeCallback(typeof(PlaybasisWrapper.OnDataResultDelegate))]
-	private void OnPlayerResult(IntPtr result, int errorCode)
+	private static void OnPlayerResult(IntPtr result, int errorCode)
 	{
 		if (result != IntPtr.Zero)
 		{
 			PlaybasisWrapper.playerWr pp = (PlaybasisWrapper.playerWr)Marshal.PtrToStructure(result, typeof(PlaybasisWrapper.playerWr));
+
+			// save response data for later use
+			playerInfo = pp;
+
 			Debug.Log("Player email " + pp.email);
 			Debug.Log("Player phoneNumber " + pp.phoneNumber);
 			Debug.Log("|_ PlayerPublic FirstName: " + pp.playerPublic.basic.firstName);
@@ -146,18 +173,22 @@ public class TestPlugin : MonoBehaviour {
 	}
 
 	[MonoPInvokeCallback(typeof(PlaybasisWrapper.OnDataResultDelegate))]
-	private void OnPointOfPlayerResult(IntPtr result, int errorCode) 
+	private static void OnPointOfPlayerResult(IntPtr result, int errorCode) 
 	{
 		if (result != IntPtr.Zero)
 		{
-			PlaybasisWrapper.pointRWr p = (PlaybasisWrapper.pointRWr)Marshal.PtrToStructure(result, typeof(PlaybasisWrapper.pointRWr));
+			PlaybasisWrapper.pointRWr pp = (PlaybasisWrapper.pointRWr)Marshal.PtrToStructure(result, typeof(PlaybasisWrapper.pointRWr));
 
-			Debug.Log("PointOfPlayer count " + p.pointArray.count);
-			Debug.Log("PointOfPlayer [0] " + p.pointArray.data[0].rewardName);
+			// save response data for later use
+			playerPointRInfo = pp;
+
+			Debug.Log("PointOfPlayer count " + pp.pointArray.count);
+			Debug.Log("PointOfPlayer [0] " + pp.pointArray.data[0].rewardName);
 		}
 		else
 		{
 			Debug.Log("pointOfPlayer api error with code " + errorCode);
 		}
 	}
+	#endif
 }
