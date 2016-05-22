@@ -81,13 +81,23 @@ public class PlaybasisWrapper : MonoBehaviour {
 
 	/*
 		Structs
+		- Arrays
 	*/
 	[StructLayout(LayoutKind.Sequential)]
 	public struct pointArrayWr {
 		public pointWr[] data;
 		public int count;
 	};
+	[StructLayout(LayoutKind.Sequential)]
+	public struct quizBasicArrayWr {
+		public quizBasicWr[] data;
+		public int count;
+	};
 
+	/*
+		Structs
+		-	Normal data model
+	*/
 	[StructLayout(LayoutKind.Sequential)]
 	public struct playerBasisWr {
 		public string image;
@@ -125,6 +135,21 @@ public class PlaybasisWrapper : MonoBehaviour {
 	[StructLayout(LayoutKind.Sequential)]
 	public struct pointRWr {
 		public pointArrayWr pointArray;
+	};
+
+	[StructLayout(LayoutKind.Sequential)]
+	public struct quizBasicWr {
+		public string name;
+		public string image;
+		public string weight;
+		public string description_;
+		public string descriptionImage;
+		public string quizId;
+	};
+
+	[StructLayout(LayoutKind.Sequential)]
+	public struct quizListWr {
+		public quizBasicArrayWr quizBasicArray;
 	};
 
 	/*
@@ -173,6 +198,11 @@ public class PlaybasisWrapper : MonoBehaviour {
 	public static void pointOfPlayer(string playerId, string pointName, OnDataResultDelegate callback)
 	{
 		_pointOfPlayer(playerId, pointName, callback);
+	}
+
+	public static void quizList(OnDataResultDelegate callback)
+	{
+		_quizList(callback);
 	}
 
 	#endif

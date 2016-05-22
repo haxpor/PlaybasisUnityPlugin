@@ -115,6 +115,62 @@ void PopulateData(pbResponseType type, PBBase_Response *response, void* outData)
 			data->pointArray.count = i;
 		}
 	}
+	else if (type == responseType_activeQuizList)
+	{
+		PBActiveQuizList_Response* cr = (PBActiveQuizList_Response*)response;
+
+		quizList* data = (quizList*)outData;
+		if (cr.list != nil)
+		{
+			if (cr.list.quizBasics != nil && [cr.list.quizBasics count] > 0)
+			{
+				const int itemsCount = [cr.list.quizBasics count];
+				quizBasic *items = new quizBasic[itemsCount];
+				int i=0;
+
+				for (PBQuizBasic* element in cr.list.quizBasics)
+				{
+					if (element != nil)
+					{
+						if (CHECK_NOTNULL(element.name))
+						{
+							items[i].name = MakeStringCopy([element.name UTF8String]);
+						}
+
+						if (CHECK_NOTNULL(element.image))
+						{
+							items[i].image = MakeStringCopy([element.image UTF8String]);
+						}
+
+						if (CHECK_NOTNULL(element.weight))
+						{
+							items[i].weight = MakeStringCopy([element.weight UTF8String]);
+						}
+
+						if (CHECK_NOTNULL(element.description_))
+						{
+							items[i].description_ = MakeStringCopy([element.description_ UTF8String]);
+						}
+
+						if (CHECK_NOTNULL(element.descriptionImage))
+						{
+							items[i].descriptionImage = MakeStringCopy([element.descriptionImage UTF8String]);
+						}
+
+						if (CHECK_NOTNULL(element.quizId))
+						{
+							items[i].quizId = MakeStringCopy([element.quizId UTF8String]);
+						}
+
+						i++;
+					}
+				}
+
+				data->quizBasicArray.data = (quizBasic*)items;
+				data->quizBasicArray.count = i;
+			}
+		}
+	}
 }
 
 /*
@@ -290,6 +346,29 @@ void _pointOfPlayer(const char* playerId, const char* pointName, OnDataResult ca
 		{
             pointR data;
 			PopulateData(responseType_point, points, &data);
+
+			if (callback)
+			{
+				callback((void*)&data, -1);
+			}
+		}
+		else
+		{
+			if (callback)
+			{
+				callback(nil, (int)error.code);
+			}
+		}
+	}];
+}
+
+void _quizList(OnDataResult callback)
+{
+	[[Playbasis sharedPB] quizListWithBlockAsync:^(PBActiveQuizList_Response * activeQuizList, NSURL *url, NSError *error) {
+		if (error == nil)
+		{
+			quizList data;
+			PopulateData(responseType_activeQuizList, activeQuizList, &data);
 
 			if (callback)
 			{

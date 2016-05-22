@@ -32,6 +32,7 @@ extern "C" {
 	void _playerPublic(const char* playerId, OnDataResult callback);
 	void _player(const char* playerId, OnDataResult callback);
 	void _pointOfPlayer(const char* playerId, const char* pointName, OnDataResult callback);
+	void _quizList(OnDataResult callback);
 
 #ifdef __cplusplus
 }

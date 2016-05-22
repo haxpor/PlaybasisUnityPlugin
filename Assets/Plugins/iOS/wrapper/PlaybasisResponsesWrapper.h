@@ -83,6 +83,35 @@ typedef struct _pointR {
 	_array<point> pointArray;
 } pointR;
 
+typedef struct _quizBasic {
+	char* name;
+	char* image;
+	char* weight;
+	char* description_;
+	char* descriptionImage;
+	char* quizId;
+
+	~_quizBasic()
+	{
+		if (name)
+			free(name);
+		if (image)
+			free(image);
+		if (weight)
+			free(weight);
+		if (description_)
+			free(description_);
+		if (descriptionImage)
+			free(descriptionImage);
+		if (quizId)
+			free(quizId);
+	}
+} quizBasic;
+
+typedef struct _quizList {
+	_array<quizBasic> quizBasicArray;
+} quizList;
+
 #ifdef __cplusplus
 }
 #endif

@@ -73,6 +73,8 @@ public class TestPlugin : MonoBehaviour {
 	}
 
 	#if UNITY_IOS
+
+	// logout()
 	[MonoPInvokeCallback(typeof(PlaybasisWrapper.OnResultDelegate))]
 	private static void OnLogoutResult(bool success)
 	{
@@ -86,6 +88,7 @@ public class TestPlugin : MonoBehaviour {
 		}
 	}
 
+	// login()
 	[MonoPInvokeCallback(typeof(PlaybasisWrapper.OnResultDelegate))]
 	private static void OnLoginResult(bool success)
 	{
@@ -99,6 +102,7 @@ public class TestPlugin : MonoBehaviour {
 		}
 	}
 
+	// auth()
 	[MonoPInvokeCallback(typeof(PlaybasisWrapper.OnResultDelegate))]
 	private static void OnAuthResult(bool success)
 	{
@@ -120,10 +124,12 @@ public class TestPlugin : MonoBehaviour {
 		//PlaybasisWrapper.playerPublic("jontestuser", OnPlayerPublicResult);
 		PlaybasisWrapper.player("jontestuser", OnPlayerResult);
 		PlaybasisWrapper.pointOfPlayer("jontestuser", "point", OnPointOfPlayerResult);
+		PlaybasisWrapper.quizList(OnQuizListResult);
 
 		//PlaybasisWrapper.logout("jontestuser", OnLogoutResult);
 	}
 
+	// playerPublic()
 	[MonoPInvokeCallback(typeof(PlaybasisWrapper.OnDataResultDelegate))]
 	private static void OnPlayerPublicResult(IntPtr result, int errorCode)
 	{
@@ -145,6 +151,7 @@ public class TestPlugin : MonoBehaviour {
 		}
 	}
 
+	// player()
 	[MonoPInvokeCallback(typeof(PlaybasisWrapper.OnDataResultDelegate))]
 	private static void OnPlayerResult(IntPtr result, int errorCode)
 	{
@@ -172,6 +179,7 @@ public class TestPlugin : MonoBehaviour {
 		}
 	}
 
+	// pointOfPlayer()
 	[MonoPInvokeCallback(typeof(PlaybasisWrapper.OnDataResultDelegate))]
 	private static void OnPointOfPlayerResult(IntPtr result, int errorCode) 
 	{
@@ -190,5 +198,27 @@ public class TestPlugin : MonoBehaviour {
 			Debug.Log("pointOfPlayer api error with code " + errorCode);
 		}
 	}
+
+	// quizList()
+	[MonoPInvokeCallback(typeof(PlaybasisWrapper.OnDataResultDelegate))]
+	private static void OnQuizListResult(IntPtr result, int errorCode) 
+	{
+		if (result != IntPtr.Zero)
+		{
+			PlaybasisWrapper.quizListWr ql = (PlaybasisWrapper.quizListWr)Marshal.PtrToStructure(result, typeof(PlaybasisWrapper.quizListWr));
+
+			Debug.Log("quizList count " + ql.quizBasicArray.count);
+			if (ql.quizBasicArray.count > 0)
+			{
+				Debug.Log("  quizList[0] name " + ql.quizBasicArray.data[0].name);
+				Debug.Log("  quizList[0] quizId " + ql.quizBasicArray.data[0].quizId);
+			}
+		}
+		else
+		{
+			Debug.Log("quizList api error with code " + errorCode);
+		}
+	}
+
 	#endif
 }
