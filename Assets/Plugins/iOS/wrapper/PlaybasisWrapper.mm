@@ -171,6 +171,150 @@ void PopulateData(pbResponseType type, PBBase_Response *response, void* outData)
 			}
 		}
 	}
+	else if (type == responseType_quizDetail)
+	{
+		PBQuizDetail_Response* cr = (PBQuizDetail_Response*)response;
+
+		quiz* data = (quiz*)outData;
+		if (cr.quiz != nil)
+		{
+			if (CHECK_NOTNULL(cr.quiz.basic))
+			{
+				// PBQuizBasic
+				PBQuizBasic *basic = cr.quiz.basic;
+				if (CHECK_NOTNULL(basic.name))
+				{
+					data->basic.name = MakeStringCopy([basic.name UTF8String]);
+				}
+
+				if (CHECK_NOTNULL(basic.image))
+				{
+					data->basic.image = MakeStringCopy([basic.image UTF8String]);
+				}
+
+				if (CHECK_NOTNULL(basic.weight))
+				{
+					data->basic.weight = MakeStringCopy([basic.weight UTF8String]);
+				}
+
+				if (CHECK_NOTNULL(basic.description_))
+				{
+					data->basic.description_ = MakeStringCopy([basic.description_ UTF8String]);
+				}
+
+				if (CHECK_NOTNULL(basic.descriptionImage))
+				{
+					data->basic.descriptionImage = MakeStringCopy([basic.descriptionImage UTF8String]);
+				}
+
+				if (CHECK_NOTNULL(basic.quizId))
+				{
+					data->basic.quizId = MakeStringCopy([basic.quizId UTF8String]);
+				}
+			}
+
+			data->dateStart = [cr.quiz.dateStart timeIntervalSince1970];
+			data->dateExpire = [cr.quiz.dateExpire timeIntervalSince1970];
+			data->status = cr.quiz.status;
+
+			// grades
+			if (CHECK_NOTNULL(cr.quiz.grades))
+			{
+				if ([cr.quiz.grades.grades count] > 0)
+				{
+					const int itemsCount = [cr.quiz.grades.grades count];
+					grade *gs = new grade[itemsCount];
+					int i=0;
+
+					for (PBGrade *grade in cr.quiz.grades.grades)
+					{
+						if (grade != nil)
+						{
+							if (CHECK_NOTNULL(grade.gradeId))
+							{
+								gs[i].gradeId = MakeStringCopy([grade.gradeId UTF8String]);
+							}
+
+							if (CHECK_NOTNULL(grade.start))
+							{
+								gs[i].start = MakeStringCopy([grade.start UTF8String]);
+							}
+
+							if (CHECK_NOTNULL(grade.end))
+							{
+								gs[i].start = MakeStringCopy([grade.end UTF8String]);
+							}
+
+							if (CHECK_NOTNULL(grade.grade))
+							{
+								gs[i].grade = MakeStringCopy([grade.grade UTF8String]);
+							}
+
+							if (CHECK_NOTNULL(grade.rank))
+							{
+								gs[i].rank = MakeStringCopy([grade.rank UTF8String]);
+							}
+
+							if (CHECK_NOTNULL(grade.rankImage))
+							{
+								gs[i].rankImage = MakeStringCopy([grade.rankImage UTF8String]);
+							}
+
+							// gradeRewards
+							if (CHECK_NOTNULL(grade.rewards))
+							{
+								if (CHECK_NOTNULL(grade.rewards.expValue))
+								{
+									gs[i].rewards.expValue = MakeStringCopy([grade.rewards.expValue UTF8String]);
+								}
+
+								if (CHECK_NOTNULL(grade.rewards.pointValue))
+								{
+									gs[i].rewards.pointValue = MakeStringCopy([grade.rewards.pointValue UTF8String]);
+								}
+
+								if (CHECK_NOTNULL(grade.rewards.customList))
+								{
+									if (CHECK_NOTNULL(grade.rewards.customList.gradeRewardCustoms))
+									{
+										if ([grade.rewards.customList.gradeRewardCustoms count] > 0)
+										{
+											const int itemsCount2 = [grade.rewards.customList.gradeRewardCustoms count];
+											gradeRewardCustom *grc = new gradeRewardCustom[itemsCount2];
+											int k=0;
+
+											for (PBGradeRewardCustom *gradeRewardCustom in grade.rewards.customList.gradeRewardCustoms)
+											{
+												if (CHECK_NOTNULL(gradeRewardCustom.customId))
+												{
+													grc[k].customId = MakeStringCopy([gradeRewardCustom.customId UTF8String]);
+												}
+
+												if (CHECK_NOTNULL(gradeRewardCustom.customValue))
+												{
+													grc[k].customValue = MakeStringCopy([gradeRewardCustom.customValue UTF8String]);
+												}
+
+												k++;
+											}
+
+											gs[i].rewards.gradeRewardCustomArray.data = (gradeRewardCustom*)grc;
+											gs[i].rewards.gradeRewardCustomArray.count = k;
+										}
+									}
+								}
+							}
+
+							i++;
+						}
+					}
+
+					data->gradeArray.data = (grade*)gs;
+					data->gradeArray.count = i;
+				}
+			}
+		}
+	}
 }
 
 /*
@@ -392,6 +536,29 @@ void _quizListOfPlayer(const char* playerId, OnDataResult callback)
 		{
 			quizList data;
 			PopulateData(responseType_activeQuizList, activeQuizList, &data);
+
+			if (callback)
+			{
+				callback((void*)&data, -1);
+			}
+		}
+		else
+		{
+			if (callback)
+			{
+				callback(nil, (int)error.code);
+			}
+		}
+	}];
+}
+
+void _quizDetail(const char* quizId, const char* playerId, OnDataResult callback)
+{
+	[[Playbasis sharedPB] quizDetailAsync:CreateNSString(quizId) forPlayer:CreateNSString(playerId) withBlock:^(PBQuizDetail_Response * quizDetail, NSURL *url, NSError *error) {
+		if (error == nil)
+		{
+			quiz data;
+			PopulateData(responseType_quizDetail, quizDetail, &data);
 
 			if (callback)
 			{

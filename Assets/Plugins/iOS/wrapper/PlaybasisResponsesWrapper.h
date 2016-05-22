@@ -83,6 +83,59 @@ typedef struct _pointR {
 	_array<point> pointArray;
 } pointR;
 
+typedef struct _gradeRewardCustom {
+	char* customId;
+	char* customValue;
+
+	~_gradeRewardCustom()
+	{
+		if (customId)
+			free(customId);
+		if (customValue)
+			free(customValue);
+	}
+} gradeRewardCustom;
+
+typedef struct _gradeRewards {
+	char* expValue;
+	char* pointValue;
+	_array<gradeRewardCustom> gradeRewardCustomArray;
+
+	~_gradeRewards()
+	{
+		if (expValue)
+			free(expValue);
+		if (pointValue)
+			free(pointValue);
+	}
+} gradeRewards;
+
+typedef struct _grade {
+	char* gradeId;
+	char* start;
+	char* end;
+	char* grade;
+	char* rank;
+	char* rankImage;
+	gradeRewards rewards;
+
+	~_grade()
+	{
+		if (gradeId)
+			free(gradeId);
+		if (start)
+			free(start);
+		if (end)
+			free(end);
+		if (grade)
+			free(grade);
+		if (rank)
+			free(rank);
+		if (rankImage)
+			free(rankImage);
+	}
+} grade;
+
 typedef struct _quizBasic {
 	char* name;
 	char* image;
@@ -107,6 +160,17 @@ typedef struct _quizBasic {
 			free(quizId);
 	}
 } quizBasic;
+
+typedef struct _quiz {
+	quizBasic basic;
+	time_t dateStart;
+	time_t dateExpire;
+	bool status;
+	_array<grade> gradeArray;
+	bool deleted;
+	unsigned int totalMaxScore;
+	unsigned int totalQuestion;
+} quiz;
 
 typedef struct _quizList {
 	_array<quizBasic> quizBasicArray;

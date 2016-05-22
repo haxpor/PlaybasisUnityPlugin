@@ -242,5 +242,33 @@ public class TestPlugin : MonoBehaviour {
 		}
 	}
 
+	// quizDetail()
+	[MonoPInvokeCallback(typeof(PlaybasisWrapper.OnDataResultDelegate))]
+	private static void OnQuizDetailResult(IntPtr result, int errorCode) 
+	{
+		if (result != IntPtr.Zero)
+		{
+			PlaybasisWrapper.quizWr q = (PlaybasisWrapper.quizWr)Marshal.PtrToStructure(result, typeof(PlaybasisWrapper.quizWr));
+
+			Debug.Log("quizDetail name " + q.basic.name);
+			Debug.Log("quizDetail quizId " + q.basic.quizId);
+			Debug.Log("quizDetail dateStart " + q.dateStart);
+			Debug.Log("quizDetail gradeArray count " + q.gradeArray.count);
+			if (q.gradeArray.count > 0)
+			{
+				Debug.Log("quizDetail.gradeArray[0] gradeId " + q.gradeArray.data[0].gradeId);
+				Debug.Log("quizDetail.gradeArray[0] rewards.expValue " + q.gradeArray.data[0].rewards.expValue);
+				if (q.gradeArray.data[0].rewards.gradeRewardCustomArray.count > 0)
+				{
+					Debug.Log("quizDetail.gradeArray[0] rewards.gradeRewardCustomArray[0].customId " + q.gradeArray.data[0].rewards.gradeRewardCustomArray.data[0].customId);
+				}
+			}
+		}
+		else
+		{
+			Debug.Log("quizDetail api error with code " + errorCode);
+		}
+	}
+
 	#endif
 }

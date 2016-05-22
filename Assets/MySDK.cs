@@ -85,6 +85,9 @@ public class PlaybasisWrapper : MonoBehaviour {
 	[DllImport ("__Internal")]
 	private static extern void _quizListOfPlayer(string playerId, OnDataResultDelegate callback);
 
+	[DllImport ("__Internal")]
+	private static extern void _quizDetail(string quizId, string playerId, OnDataResultDelegate callback);
+
 	/*
 		Structs
 		- Arrays
@@ -94,9 +97,22 @@ public class PlaybasisWrapper : MonoBehaviour {
 		public pointWr[] data;
 		public int count;
 	};
+	
 	[StructLayout(LayoutKind.Sequential)]
 	public struct quizBasicArrayWr {
 		public quizBasicWr[] data;
+		public int count;
+	};
+
+	[StructLayout(LayoutKind.Sequential)]
+	public struct gradeArrayWr {
+		public gradeWr[] data;
+		public int count;
+	};
+
+	[StructLayout(LayoutKind.Sequential)]
+	public struct gradeRewardCustomArrayWr {
+		public gradeRewardCustomWr[] data;
 		public int count;
 	};
 
@@ -151,6 +167,42 @@ public class PlaybasisWrapper : MonoBehaviour {
 		public string description_;
 		public string descriptionImage;
 		public string quizId;
+	};
+
+	[StructLayout(LayoutKind.Sequential)]
+	public struct gradeRewardCustomWr {
+		public string customId;
+		public string customValue;
+	};
+
+	[StructLayout(LayoutKind.Sequential)]
+	public struct gradeRewardsWr {
+		public string expValue;
+		public string pointValue;
+		public gradeRewardCustomArrayWr gradeRewardCustomArray;
+	};
+
+	[StructLayout(LayoutKind.Sequential)]
+	public struct gradeWr {
+		public string gradeId;
+		public string start;
+		public string end;
+		public string grade;
+		public string rank;
+		public string rankImage;
+		public gradeRewardsWr rewards;
+	};
+
+	[StructLayout(LayoutKind.Sequential)]
+	public struct quizWr {
+		public quizBasicWr basic;
+		public long dateStart;
+		public long dateExpire;
+		public bool status;
+		public gradeArrayWr gradeArray;
+		public bool deleted;
+		public uint totalMaxScore;
+		public uint totalQuestion;
 	};
 
 	[StructLayout(LayoutKind.Sequential)]
@@ -214,6 +266,11 @@ public class PlaybasisWrapper : MonoBehaviour {
 	public static void quizListOfPlayer(string playerId, OnDataResultDelegate callback)
 	{
 		_quizListOfPlayer(playerId, callback);
+	}
+
+	public static void quizDetail(string quizId, string playerId, OnDataResultDelegate callback)
+	{
+		_quizDetail(quizId, playerId, callback);
 	}
 
 	#endif
