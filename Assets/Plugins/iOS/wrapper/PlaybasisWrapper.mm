@@ -384,3 +384,26 @@ void _quizList(OnDataResult callback)
 		}
 	}];
 }
+
+void _quizListOfPlayer(const char* playerId, OnDataResult callback)
+{
+	[[Playbasis sharedPB] quizListOfPlayerAsync:CreateNSString(playerId) withBlock:^(PBActiveQuizList_Response * activeQuizList, NSURL *url, NSError *error) {
+		if (error == nil)
+		{
+			quizList data;
+			PopulateData(responseType_activeQuizList, activeQuizList, &data);
+
+			if (callback)
+			{
+				callback((void*)&data, -1);
+			}
+		}
+		else
+		{
+			if (callback)
+			{
+				callback(nil, (int)error.code);
+			}
+		}
+	}];
+}

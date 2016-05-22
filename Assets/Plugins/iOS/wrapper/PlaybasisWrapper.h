@@ -33,6 +33,7 @@ extern "C" {
 	void _player(const char* playerId, OnDataResult callback);
 	void _pointOfPlayer(const char* playerId, const char* pointName, OnDataResult callback);
 	void _quizList(OnDataResult callback);
+	void _quizListOfPlayer(const char* playerId, OnDataResult callback);
 
 #ifdef __cplusplus
 }
