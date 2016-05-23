@@ -28,5 +28,9 @@
 + (void) populateQuestion:(question*)outData from:(PBQuestion*)pbData;
 + (void) populateQuestionOption:(questionOption*)outData from:(PBQuestionOption*)pbData;
 + (void) populateQuestionOptionArray:(_array<questionOption>*)outData from:(NSArray*)pbArray;
++ (void) populateQuestionAnswered:(questionAnswered*)outData from:(PBQuestionAnswered*)pbData;
++ (void) populateQuestionAnsweredOption:(questionAnsweredOption*)outData from:(PBQuestionAnsweredOption*)pbData;
++ (void) populateQuestionAnsweredOptionArray:(_array<questionAnsweredOption>*)outData from:(NSArray*)pbArray;
++ (void) populateQuestionAnsweredGradeDone:(questionAnsweredGradeDone*)outData from:(PBQuestionAnsweredGradeDone*)pbData;
 
 @end

@@ -389,4 +389,69 @@
     outData->count = i;
 }
 
++ (void) populateQuestionAnswered:(questionAnswered*)outData from:(PBQuestionAnswered*)pbData
+{
+    RETURNIFNULL(pbData)
+
+    // array of questionAnsweredOption
+    [Populator populateQuestionAnsweredOptionArray:&outData->optionArray from:pbData.options.answeredOptions];
+
+    outData->score = pbData.score;
+    COPYSTRING(pbData.maxScore, outData->maxScore)
+    COPYSTRING(pbData.explanation, outData->explanation)
+    outData->totalScore = pbData.totalScore;
+    outData->totalMaxScore = pbData.totalMaxScore;
+
+    // questionAnsweredGradeDone
+    [Populator populateQuestionAnsweredGradeDone:&outData->gradeDone from:pbData.grade];
+
+    // array of gradeDoneReward
+    [Populator populateGradeDoneRewardArray:&outData->gradeDoneRewardArray from:pbData.rewards.gradeDoneRewards];
+}
+
++ (void) populateQuestionAnsweredOption:(questionAnsweredOption*)outData from:(PBQuestionAnsweredOption*)pbData
+{
+    RETURNIFNULL(pbData)
+
+    COPYSTRING(pbData.option, outData->option)
+    COPYSTRING(pbData.score, outData->score)
+    COPYSTRING(pbData.explanation, outData->explanation)
+    COPYSTRING(pbData.optionImage, outData->optionImage)
+    COPYSTRING(pbData.optionId, outData->optionId)
+}
+
++ (void) populateQuestionAnsweredOptionArray:(_array<questionAnsweredOption>*)outData from:(NSArray*)pbArray
+{
+    RETURNIFNULL(pbArray)
+
+    questionAnsweredOption *items = new questionAnsweredOption[[pbArray count]];
+    int i=0;
+
+    for (PBQuestionAnsweredOption* c in pbArray)
+    {
+        // populateQuestionAnsweredOption
+        [Populator populateQuestionAnsweredOption:&items[i] from:c];
+        i++;
+    }
+
+    outData->data = items;
+    outData->count = i;
+}
+
++ (void) populateQuestionAnsweredGradeDone:(questionAnsweredGradeDone*)outData from:(PBQuestionAnsweredGradeDone*)pbData
+{
+    RETURNIFNULL(pbData)
+
+    COPYSTRING(pbData.gradeId, outData->gradeId)
+    COPYSTRING(pbData.start, outData->start)
+    COPYSTRING(pbData.end, outData->end)
+    COPYSTRING(pbData.grade, outData->grade)
+    COPYSTRING(pbData.rank, outData->rank)
+    COPYSTRING(pbData.rankImage, outData->rankImage)
+    outData->score = pbData.score;
+    COPYSTRING(pbData.maxScore, outData->maxScore)
+    outData->totalScore = outData->totalScore;
+    outData->totalMaxScore = outData->totalMaxScore;
+}
+
 @end

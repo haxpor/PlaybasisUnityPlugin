@@ -314,7 +314,7 @@ typedef struct _questionAnswered {
 	char* explanation;
 	unsigned int totalScore;
 	unsigned int totalMaxScore;
-	_array<questionAnsweredGradeDone> gradeDoneArray;
+	questionAnsweredGradeDone gradeDone;
 	_array<gradeDoneReward> gradeDoneRewardArray;
 } questionAnswered;
 

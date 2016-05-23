@@ -71,7 +71,10 @@ void PopulateData(pbResponseType type, PBBase_Response *response, void* outData)
 	}
 	else if (type == responseType_questionAnswered)
 	{
-		// TODO: Add this...
+		PBQuestionAnswered_Response* cr = (PBQuestionAnswered_Response*)response;
+
+		questionAnswered* data = (questionAnswered*)outData;
+		[Populator populateQuestionAnswered:data from:cr.result];
 	}
 }
 
