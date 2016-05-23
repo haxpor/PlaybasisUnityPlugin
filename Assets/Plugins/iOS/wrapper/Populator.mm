@@ -273,4 +273,78 @@
     outData->count = i;
 }
 
++ (void) populateQuizPending:(quizPending*)outData from:(PBQuizPending*)pbData
+{
+    RETURNIFNULL(pbData)
+
+    outData->value = pbData.value;
+
+    // quizPendingGrade
+    [Populator populateQuizPendingGrade:&outData->grade from:pbData.grade];
+
+    outData->totalCompletedQuestions = pbData.totalCompletedQuestions;
+    outData->totalPendingQuestions = pbData.totalPendingQuestions;
+    COPYSTRING(pbData.quizId, outData->quizId);
+}
+
++ (void) populateQuizPendingArray:(_array<quizPending>*)outData from:(NSArray*)pbArray
+{
+    RETURNIFNULL(pbArray)
+
+    quizPending *items = new quizPending[[pbArray count]];
+    int i=0;
+
+    for (PBQuizPending *c in pbArray)
+    {
+        // quizPending
+        [Populator populateQuizPending:&items[i] from:c];
+        i++;
+    }
+
+    outData->data = items;
+    outData->count = i;
+}
+
++ (void) populateQuizPendingGrade:(quizPendingGrade*)outData from:(PBQuizPendingGrade*)pbData
+{
+    RETURNIFNULL(pbData)
+
+    outData->score = pbData.score;
+
+    // quizPendingGradeRewards
+    [Populator populateQuizPendingGradeRewardArray:&outData->quizPendingGradeRewardArray from:pbData.rewards.list];
+
+    COPYSTRING(pbData.maxScore, outData->maxScore)
+    outData->totalScore = pbData.totalScore;
+    outData->totalMaxScore = pbData.totalMaxScore;
+}
+
++ (void) populateQuizPendingGradeReward:(quizPendingGradeReward*)outData from:(PBQuizPendingGradeReward*)pbData
+{
+    RETURNIFNULL(pbData)
+
+    COPYSTRING(pbData.eventType, outData->eventType)
+    COPYSTRING(pbData.rewardType, outData->rewardType)
+    COPYSTRING(pbData.rewardId, outData->rewardId)
+    COPYSTRING(pbData.value, outData->value)
+}
+
++ (void) populateQuizPendingGradeRewardArray:(_array<quizPendingGradeReward>*)outData from:(NSArray*)pbArray
+{
+    RETURNIFNULL(pbArray)
+
+    quizPendingGradeReward *items = new quizPendingGradeReward[[pbArray count]];
+    int i=0;
+
+    for (PBQuizPendingGradeReward *c in pbArray)
+    {
+        // quizPendingGradeReward
+        [Populator populateQuizPendingGradeReward:&items[i] from:c];
+        i++;
+    }
+
+    outData->data = items;
+    outData->count = i;
+}
+
 @end

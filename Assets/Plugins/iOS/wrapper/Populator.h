@@ -20,5 +20,10 @@
 + (void) populateGradeDone:(gradeDone*)outData from:(PBGradeDone*)pbData;
 + (void) populateGradeDoneReward:(gradeDoneReward*)outData from:(PBGradeDoneReward*)pbData;
 + (void) populateGradeDoneRewardArray:(_array<gradeDoneReward>*)outData from:(NSArray*)pbArray;
++ (void) populateQuizPending:(quizPending*)outData from:(PBQuizPending*)pbData;
++ (void) populateQuizPendingArray:(_array<quizPending>*)outData from:(NSArray*)pbArray;
++ (void) populateQuizPendingGrade:(quizPendingGrade*)outData from:(PBQuizPendingGrade*)pbData;
++ (void) populateQuizPendingGradeReward:(quizPendingGradeReward*)outData from:(PBQuizPendingGradeReward*)pbData;
++ (void) populateQuizPendingGradeRewardArray:(_array<quizPendingGradeReward>*)outData from:(NSArray*)pbArray;
 
 @end
