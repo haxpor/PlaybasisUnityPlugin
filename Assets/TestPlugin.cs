@@ -127,7 +127,7 @@ public class TestPlugin : MonoBehaviour {
 		PlaybasisWrapper.quizList(OnQuizListResult);
 		PlaybasisWrapper.quizListOfPlayer("jontestuser", OnQuizListOfPlayerResult);
 		PlaybasisWrapper.quizRandom("jontestuser", OnQuizRandomResult);
-		PlaybasisWrapper.quizDone("jontestuser", OnQuizDoneResult);
+		PlaybasisWrapper.quizDoneList("jontestuser", OnQuizDoneResult);
 
 		//PlaybasisWrapper.logout("jontestuser", OnLogoutResult);
 	}

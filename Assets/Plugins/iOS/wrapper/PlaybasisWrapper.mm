@@ -759,7 +759,7 @@ void _quizRandom(const char* playerId, OnDataResult callback)
 	}];
 }
 
-void _quizDone(const char* playerId, int limit, OnDataResult callback)
+void _quizDoneList(const char* playerId, int limit, OnDataResult callback)
 {
 	[[Playbasis sharedPB] quizDoneForPlayerAsync:CreateNSString(playerId) limit:limit withBlock:^(PBQuizDoneList_Response * qlist, NSURL *url, NSError *error) {
 		if (error == nil)
