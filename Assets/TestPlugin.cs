@@ -127,7 +127,8 @@ public class TestPlugin : MonoBehaviour {
 		PlaybasisWrapper.quizList(OnQuizListResult);
 		PlaybasisWrapper.quizListOfPlayer("jontestuser", OnQuizListOfPlayerResult);
 		PlaybasisWrapper.quizRandom("jontestuser", OnQuizRandomResult);
-		PlaybasisWrapper.quizDoneList("jontestuser", 20, OnQuizDoneResult);
+		PlaybasisWrapper.quizDoneList("jontestuser", 20, OnQuizDoneListResult);
+		PlaybasisWrapper.quizPendingList("jontestuser", 20, OnQuizPendingListResult);
 
 		//PlaybasisWrapper.logout("jontestuser", OnLogoutResult);
 	}
@@ -290,7 +291,7 @@ public class TestPlugin : MonoBehaviour {
 
 	// quizDone()
 	[MonoPInvokeCallback(typeof(PlaybasisWrapper.OnDataResultDelegate))]
-	private static void OnQuizDoneResult(IntPtr result, int errorCode) 
+	private static void OnQuizDoneListResult(IntPtr result, int errorCode) 
 	{
 		if (result != IntPtr.Zero)
 		{
@@ -301,6 +302,22 @@ public class TestPlugin : MonoBehaviour {
 		else
 		{
 			Debug.Log("quizDone api error with code " + errorCode);
+		}
+	}
+
+	// quiz()
+	[MonoPInvokeCallback(typeof(PlaybasisWrapper.OnDataResultDelegate))]
+	private static void OnQuizPendingListResult(IntPtr result, int errorCode) 
+	{
+		if (result != IntPtr.Zero)
+		{
+			PlaybasisWrapper.quizPendingListWr q = (PlaybasisWrapper.quizPendingListWr)Marshal.PtrToStructure(result, typeof(PlaybasisWrapper.quizPendingListWr));
+
+			Debug.Log("quizPendingList success");
+		}
+		else
+		{
+			Debug.Log("quizPendingList api error with code " + errorCode);
 		}
 	}
 

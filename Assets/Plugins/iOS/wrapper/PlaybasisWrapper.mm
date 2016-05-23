@@ -476,6 +476,100 @@ void PopulateData(pbResponseType type, PBBase_Response *response, void* outData)
 			}
 		}
 	}
+	else if (type == responseType_quizPendingsByPlayer)
+	{
+		PBQuizPendings_Response* cr = (PBQuizPendings_Response*)response;
+
+		quizPendingList* data = (quizPendingList*)outData;
+		if (cr.quizPendings != nil)
+		{
+			if (cr.quizPendings.list != nil)
+			{
+				if ([cr.quizPendings.list count] > 0)
+				{
+					const int itemsCount = [cr.quizPendings.list count];
+					quizPending *qps = new quizPending[itemsCount];
+					int i=0;
+
+					for (PBQuizPending *element in cr.quizPendings.list)
+					{
+						qps[i].value = element.value;
+
+						// quizPendingGrade
+						if (element.grade != nil)
+						{
+							PBQuizPendingGrade *pbQuizGrade = element.grade;
+
+							qps[i].grade.score = pbQuizGrade.score;
+
+							// quizPendingGradeRewardArray
+							if (element.grade.rewards != nil)
+							{
+								if (element.grade.rewards.list != nil)
+								{
+									if ([element.grade.rewards.list count] > 0)
+									{
+										const int itemsCount2 = [element.grade.rewards.list count];
+										quizPendingGradeReward *qpgr = new quizPendingGradeReward[itemsCount2];
+										int k=0;
+
+										for (PBQuizPendingGradeReward* element2 in element.grade.rewards.list)
+										{
+											if (CHECK_NOTNULL(element2.eventType))
+											{
+												qpgr[k].eventType = MakeStringCopy([element2.eventType UTF8String]);
+											}
+
+											if (CHECK_NOTNULL(element2.rewardType))
+											{
+												qpgr[k].rewardType = MakeStringCopy([element2.rewardType UTF8String]);
+											}
+
+											if (CHECK_NOTNULL(element2.rewardId))
+											{
+												qpgr[k].rewardId = MakeStringCopy([element2.rewardId UTF8String]);
+											}
+
+											if (CHECK_NOTNULL(element2.value))
+											{
+												qpgr[k].value = MakeStringCopy([element2.value UTF8String]);
+											}
+
+											k++;
+										}
+
+										qps[i].grade.quizPendingGradeRewardArray.data = (quizPendingGradeReward*)qpgr;
+										qps[i].grade.quizPendingGradeRewardArray.count = k;
+									}
+								}
+							}
+
+							if (CHECK_NOTNULL(pbQuizGrade.maxScore))
+							{
+								qps[i].grade.maxScore = MakeStringCopy([pbQuizGrade.maxScore UTF8String]);
+							}
+
+							qps[i].grade.totalScore = pbQuizGrade.totalScore;
+							qps[i].grade.totalMaxScore = pbQuizGrade.totalMaxScore;
+						}
+
+						qps[i].totalCompletedQuestions = element.totalCompletedQuestions;
+						qps[i].totalPendingQuestions = element.totalPendingQuestions;
+
+						if (CHECK_NOTNULL(element.quizId))
+						{
+							qps[i].quizId = MakeStringCopy([element.quizId UTF8String]);
+						}
+
+						i++;
+					}
+
+					data->quizPendingArray.data = (quizPending*)qps;
+					data->quizPendingArray.count = i;
+				}
+			}
+		}
+	}
 }
 
 /*
@@ -766,6 +860,29 @@ void _quizDoneList(const char* playerId, int limit, OnDataResult callback)
 		{
 			quizDoneList data;
 			PopulateData(responseType_quizDoneListByPlayer, qlist, &data);
+
+			if (callback)
+			{
+				callback((void*)&data, -1);
+			}
+		}
+		else
+		{
+			if (callback)
+			{
+				callback(nil, (int)error.code);
+			}
+		}
+	}];
+}
+
+void _quizPendingList(const char* playerId, int limit, OnDataResult callback)
+{
+	[[Playbasis sharedPB] quizPendingOfPlayerAsync:CreateNSString(playerId) limit:limit withBlock:^(PBQuizPendings_Response * response, NSURL *url, NSError *error) {
+		if (error == nil)
+		{
+			quizPendingList data;
+			PopulateData(responseType_quizPendingsByPlayer, response, &data);
 
 			if (callback)
 			{

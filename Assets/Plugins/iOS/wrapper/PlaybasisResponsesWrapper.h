@@ -236,6 +236,29 @@ typedef struct _quizDone {
 	}
 } quizDone;
 
+typedef struct _quizPendingGradeReward {
+	char* eventType;
+	char* rewardType;
+	char* rewardId;
+	char* value;
+} quizPendingGradeReward;
+
+typedef struct _quizPendingGrade {
+	unsigned int score;
+	_array<quizPendingGradeReward> quizPendingGradeRewardArray;
+	char* maxScore;
+	unsigned int totalScore;
+	unsigned int totalMaxScore;
+} quizPendingGrade;
+
+typedef struct _quizPending {
+	unsigned int value;
+	quizPendingGrade grade;
+	unsigned int totalCompletedQuestions;
+	unsigned int totalPendingQuestions;
+	char* quizId;
+} quizPending;
+
 typedef struct _quizDoneList {
 	_array<quizDone> quizDoneArray;
 } quizDoneList;
@@ -243,6 +266,10 @@ typedef struct _quizDoneList {
 typedef struct _quizList {
 	_array<quizBasic> quizBasicArray;
 } quizList;
+
+typedef struct _quizPendingList {
+	_array<quizPending> quizPendingArray;
+} quizPendingList;
 
 
 #ifdef __cplusplus

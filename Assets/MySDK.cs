@@ -94,6 +94,9 @@ public class PlaybasisWrapper : MonoBehaviour {
 	[DllImport ("__Internal")]
 	private static extern void _quizDoneList(string playerId, int limit, OnDataResultDelegate callback);
 
+	[DllImport ("__Internal")]
+	private static extern void _quizPendingList(string playerId, int limit, OnDataResultDelegate callback);
+
 	/*
 		Structs
 		- Arrays
@@ -131,6 +134,16 @@ public class PlaybasisWrapper : MonoBehaviour {
 		public gradeDoneRewardWr[] data;
 		public int count;
 	};
+	[StructLayout(LayoutKind.Sequential)]
+	public struct quizPendingGradeRewardArrayWr {
+		public quizPendingGradeRewardWr[] data;
+		public int count;
+	}
+	[StructLayout(LayoutKind.Sequential)]
+	public struct quizPendingListWr {
+		public quizPendingWr[] data;
+		public int count;
+	}
 
 	/*
 		Structs
@@ -255,6 +268,32 @@ public class PlaybasisWrapper : MonoBehaviour {
 		public gradeDoneWr gradeDone;
 	};
 
+	[StructLayout(LayoutKind.Sequential)]
+	public struct quizPendingGradeRewardWr {
+		public string eventType;
+		public string rewardType;
+		public string rewardId;
+		public string value;
+	};
+
+	[StructLayout(LayoutKind.Sequential)]
+	public struct quizPendingGradeWr {
+		public uint score;
+		public quizPendingGradeRewardArrayWr quizPendingGradeRewardArray;
+		public string maxScore;
+		public uint totalScore;
+		public uint totalMaxScore;
+	};
+
+	[StructLayout(LayoutKind.Sequential)]
+	public struct quizPendingWr {
+		public uint value;
+		public quizPendingGradeWr grade;
+		public uint totalCompletedQuestions;
+		public uint totalPendingQuestions;
+		public string quizId;
+	};
+
 	/*
 		All implementation of api methods are non-blocking call, but synchronized call for Playbasis Platform.
 	*/
@@ -326,6 +365,11 @@ public class PlaybasisWrapper : MonoBehaviour {
 	public static void quizDoneList(string playerId, int limit, OnDataResultDelegate callback)
 	{
 		_quizDoneList(playerId, limit, callback);
+	}
+
+	public static void quizPendingList(string playerId, int limit, OnDataResultDelegate callback)
+	{
+		_quizPendingList(playerId, limit, callback);
 	}
 
 	#endif
