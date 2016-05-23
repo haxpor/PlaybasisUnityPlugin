@@ -169,7 +169,7 @@ typedef struct _quiz {
 	_array<grade> gradeArray;
 	bool deleted;
 	unsigned int totalMaxScore;
-	unsigned int totalQuestion;
+	unsigned int totalQuestions;
 } quiz;
 
 typedef struct _gradeDoneReward {

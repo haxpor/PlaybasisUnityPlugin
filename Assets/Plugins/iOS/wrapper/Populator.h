@@ -7,5 +7,13 @@
 + (void) populatePlayerPublic:(playerPublic*)outData from:(PBPlayerPublic_Response*)pbData;
 + (void) populatePlayer:(player*)outData from:(PBPlayer_Response*)pbData;
 + (void) populatePointArray:(_array<point>*)outData from:(NSArray*)pbArray;
++ (void) populateQuizArray:(_array<quizBasic>*)outData from:(NSArray*)pbArray;
++ (void) populateQuizBasic:(quizBasic*)outData from:(PBQuizBasic*)pbData;
++ (void) populateQuiz:(quiz*)outData from:(PBQuiz*)pbData;
++ (void) populateGrade:(grade*)outData from:(PBGrade*)pbData;
++ (void) populateGradeArray:(_array<grade>*)outData from:(NSArray*)pbArray;
++ (void) populateGradeRewards:(gradeRewards*)outData from:(PBGradeRewards*)pbData;
++ (void) populateGradeRewardCustom:(gradeRewardCustom*)outData from:(PBGradeRewardCustom*)pbData;
++ (void) populateGradeRewardCustomArray:(_array<gradeRewardCustom>*)outData from:(NSArray*)pbArray;
 
 @end
