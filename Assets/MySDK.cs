@@ -213,7 +213,7 @@ public class PlaybasisWrapper : MonoBehaviour {
 	public struct quizBasicWr {
 		public string name;
 		public string image;
-		public string weight;
+		public int weight;
 		public string description_;
 		public string descriptionImage;
 		public string quizId;

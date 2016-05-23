@@ -123,9 +123,9 @@ public class TestPlugin : MonoBehaviour {
 		PlaybasisWrapper.login("jontestuser", OnLoginResult);
 		//PlaybasisWrapper.playerPublic("jontestuser", OnPlayerPublicResult);
 		//PlaybasisWrapper.player("jontestuser", OnPlayerResult);
-		PlaybasisWrapper.pointOfPlayer("jontestuser", "point", OnPointOfPlayerResult);
+		//PlaybasisWrapper.pointOfPlayer("jontestuser", "point", OnPointOfPlayerResult);
 		//PlaybasisWrapper.quizList(OnQuizListResult);
-		//PlaybasisWrapper.quizListOfPlayer("jontestuser", OnQuizListOfPlayerResult);
+		PlaybasisWrapper.quizListOfPlayer("jontestuser", OnQuizListOfPlayerResult);
 		//PlaybasisWrapper.quizRandom("jontestuser", OnQuizRandomResult);
 		//PlaybasisWrapper.quizDoneList("jontestuser", 20, OnQuizDoneListResult);
 		//PlaybasisWrapper.quizPendingList("jontestuser", 20, OnQuizPendingListResult);
@@ -237,6 +237,8 @@ public class TestPlugin : MonoBehaviour {
 			{
 				Debug.Log("  quizListOfPlayer[0] name " + ql.quizBasicArray.data[0].name);
 				Debug.Log("  quizListOfPlayer[0] quizId " + ql.quizBasicArray.data[0].quizId);
+				Debug.Log("  quizListOfPlayer[1] name " + ql.quizBasicArray.data[1].name);
+				Debug.Log("  quizListOfPlayer[1] quizId " + ql.quizBasicArray.data[1].quizId);
 			}
 		}
 		else

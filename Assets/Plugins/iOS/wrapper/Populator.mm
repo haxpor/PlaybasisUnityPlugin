@@ -83,7 +83,7 @@
     {
         COPYSTRING(qb.name, items[i].name)
         COPYSTRING(qb.image, items[i].image)
-        COPYSTRING(qb.weight, items[i].weight)
+        items[i].weight = qb.weight;
         COPYSTRING(qb.description_, items[i].description_)
         COPYSTRING(qb.descriptionImage, items[i].descriptionImage)
         COPYSTRING(qb.quizId, items[i].quizId)
@@ -99,7 +99,7 @@
 
     COPYSTRING(pbData.name, outData->name)
     COPYSTRING(pbData.image, outData->image)
-    COPYSTRING(pbData.weight, outData->weight)
+    outData->weight = pbData.weight;
     COPYSTRING(pbData.description_, outData->description_)
     COPYSTRING(pbData.descriptionImage, outData->descriptionImage)
     COPYSTRING(pbData.quizId, outData->quizId)

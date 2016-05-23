@@ -139,7 +139,7 @@ typedef struct _grade {
 typedef struct _quizBasic {
 	char* name;
 	char* image;
-	char* weight;
+	int weight;
 	char* description_;
 	char* descriptionImage;
 	char* quizId;
@@ -150,8 +150,6 @@ typedef struct _quizBasic {
 			free(name);
 		if (image)
 			free(image);
-		if (weight)
-			free(weight);
 		if (description_)
 			free(description_);
 		if (descriptionImage)
