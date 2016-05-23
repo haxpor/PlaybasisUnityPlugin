@@ -115,8 +115,16 @@ public class PlaybasisWrapper : MonoBehaviour {
 	
 	[StructLayout(LayoutKind.Sequential)]
 	public struct quizBasicArrayWr {
-		public quizBasicWr[] data;
+		public IntPtr data;
 		public int count;
+
+		// on-demand random access for underlying data pointed to by IntPtr
+		// method won't affect the size of structure, thus we still can do random access
+		public quizBasicWr itemAt(int i)
+		{
+			IntPtr ptr = (IntPtr)((long)data + Marshal.SizeOf(typeof(quizBasicWr))*i);
+			return (quizBasicWr)Marshal.PtrToStructure(ptr, typeof(quizBasicWr));
+		}
 	};
 
 	[StructLayout(LayoutKind.Sequential)]

@@ -12,6 +12,7 @@ public class TestPlugin : MonoBehaviour {
 	#if UNITY_IOS
 	private static PlaybasisWrapper.playerWr playerInfo;
 	private static PlaybasisWrapper.pointRWr playerPointRInfo;
+	private static PlaybasisWrapper.quizBasicWr lastQuizBasicInfo;
 	#endif
 
 	private TestPlugin()
@@ -54,21 +55,12 @@ public class TestPlugin : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began) {
-
-            // check data returned from api
-			Debug.Log("Player email " + playerInfo.email);
-			Debug.Log("Player phoneNumber " + playerInfo.phoneNumber);
-			Debug.Log("|_ PlayerPublic FirstName: " + playerInfo.playerPublic.basic.firstName);
-			Debug.Log("|_ PlayerPublic Username: " + playerInfo.playerPublic.basic.userName);
-			Debug.Log("|_ PlayerPublic exp: " + playerInfo.playerPublic.basic.exp);
-			Debug.Log("|_ PlayerPublic LastName: " + playerInfo.playerPublic.basic.lastName);
-			Debug.Log("|_ PlayerPublic clPlayerId: " + playerInfo.playerPublic.basic.clPlayerId);
-			Debug.Log("|_ PlayerPublic registered: " + playerInfo.playerPublic.registered);
-			Debug.Log("|_ PlayerPublic lastLogin: " + playerInfo.playerPublic.lastLogin);
-			Debug.Log("|_ PlayerPublic lastLogout: " + playerInfo.playerPublic.lastLogout);
-
-			Debug.Log("PointOfPlayer count " + playerPointRInfo.pointArray.count);
-			Debug.Log("PointOfPlayer [0] " + playerPointRInfo.pointArray.data[0].rewardName);
+			Debug.Log("  quizListOfPlayer[last] name " + lastQuizBasicInfo.name);
+			Debug.Log("  quizListOfPlayer[last] image " + lastQuizBasicInfo.image);
+			Debug.Log("  quizListOfPlayer[last] weight " + lastQuizBasicInfo.weight);
+			Debug.Log("  quizListOfPlayer[last] description_ " + lastQuizBasicInfo.description_);
+			Debug.Log("  quizListOfPlayer[last] descriptionImage " + lastQuizBasicInfo.descriptionImage);
+			Debug.Log("  quizListOfPlayer[last] quizId " + lastQuizBasicInfo.quizId);
         }
 	}
 
@@ -212,11 +204,6 @@ public class TestPlugin : MonoBehaviour {
 			PlaybasisWrapper.quizListWr ql = (PlaybasisWrapper.quizListWr)Marshal.PtrToStructure(result, typeof(PlaybasisWrapper.quizListWr));
 
 			Debug.Log("quizList count " + ql.quizBasicArray.count);
-			if (ql.quizBasicArray.count > 0)
-			{
-				Debug.Log("  quizList[0] name " + ql.quizBasicArray.data[0].name);
-				Debug.Log("  quizList[0] quizId " + ql.quizBasicArray.data[0].quizId);
-			}
 		}
 		else
 		{
@@ -233,12 +220,20 @@ public class TestPlugin : MonoBehaviour {
 			PlaybasisWrapper.quizListWr ql = (PlaybasisWrapper.quizListWr)Marshal.PtrToStructure(result, typeof(PlaybasisWrapper.quizListWr));
 
 			Debug.Log("quizListOfPlayer count " + ql.quizBasicArray.count);
+
+			// test random access on array
 			if (ql.quizBasicArray.count > 0)
 			{
-				Debug.Log("  quizListOfPlayer[0] name " + ql.quizBasicArray.data[0].name);
-				Debug.Log("  quizListOfPlayer[0] quizId " + ql.quizBasicArray.data[0].quizId);
-				Debug.Log("  quizListOfPlayer[1] name " + ql.quizBasicArray.data[1].name);
-				Debug.Log("  quizListOfPlayer[1] quizId " + ql.quizBasicArray.data[1].quizId);
+				PlaybasisWrapper.quizBasicWr quiz = ql.quizBasicArray.itemAt(ql.quizBasicArray.count-1);
+				// save for later print test
+				lastQuizBasicInfo = quiz;
+
+				Debug.Log("  quizListOfPlayer[last] name " + quiz.name);
+				Debug.Log("  quizListOfPlayer[last] image " + quiz.image);
+				Debug.Log("  quizListOfPlayer[last] weight " + quiz.weight);
+				Debug.Log("  quizListOfPlayer[last] description_ " + quiz.description_);
+				Debug.Log("  quizListOfPlayer[last] descriptionImage " + quiz.descriptionImage);
+				Debug.Log("  quizListOfPlayer[last] quizId " + quiz.quizId);
 			}
 		}
 		else
