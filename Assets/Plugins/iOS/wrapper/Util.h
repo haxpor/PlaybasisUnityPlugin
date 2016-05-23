@@ -1,4 +1,5 @@
 #define CHECK_NOTNULL(x) x != nil && x != (id)[NSNull null]
+#define COPYSTRING(from, to) if(CHECK_NOTNULL(from)) { to = MakeStringCopy([from UTF8String]); }
 
 // Converts C style string to NSString
 inline NSString* CreateNSString (const char* string)

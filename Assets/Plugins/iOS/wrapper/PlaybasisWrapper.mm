@@ -8,64 +8,24 @@ void PopulateData(pbResponseType type, PBBase_Response *response, void* outData)
 {
 	if (type == responseType_playerPublic)
 	{
-		PBPlayerPublic_Response* playerResponse = (PBPlayerPublic_Response*)response;
+		PBPlayerPublic_Response* cr = (PBPlayerPublic_Response*)response;
 
 		playerPublic* data = (playerPublic*)outData;
-		[Populator populatePlayerPublic:data from:playerResponse];
+		[Populator populatePlayerPublic:data from:cr];
 	}
 	else if (type == responseType_player)
 	{
 		PBPlayer_Response* cr = (PBPlayer_Response*)response;
 
 		player* data = (player*)outData;
-		if (cr.playerPublic != nil)
-		{
-			PopulateData(responseType_playerPublic, cr.playerPublic, &(data->playerPublic));
-		}
-
-		if (CHECK_NOTNULL(cr.email))
-		{
-			data->email = MakeStringCopy([cr.email UTF8String]);
-		}
-
-		if (CHECK_NOTNULL(cr.phoneNumber))
-		{
-			data->phoneNumber = MakeStringCopy([cr.phoneNumber UTF8String]);
-		}
+		[Populator populatePlayer:data from:cr];
 	}
 	else if (type == responseType_point)
 	{
 		PBPoint_Response* cr = (PBPoint_Response*)response;
 
 		pointR* data = (pointR*)outData;
-		if (cr.point != nil && [cr.point count] > 0)
-		{
-			point *items = new point[[cr.point count]];
-			int i=0;
-
-			for (PBPoint* pt in cr.point)
-			{
-				if (pt != nil)
-				{
-					if (CHECK_NOTNULL(pt.rewardId))
-					{
-						items[i].rewardId = MakeStringCopy([pt.rewardId UTF8String]);
-					}
-
-					if (CHECK_NOTNULL(pt.rewardName))
-					{
-						items[i].rewardName = MakeStringCopy([pt.rewardName UTF8String]);
-					}
-
-					items[i].value = pt.value;
-					i++;
-				}
-			}
-
-			// set result to data
-			data->pointArray.data = (point*)items;
-			data->pointArray.count = i;
-		}
+		[Populator populatePointArray:&data->pointArray from:cr.point];
 	}
 	else if (type == responseType_activeQuizList)
 	{
