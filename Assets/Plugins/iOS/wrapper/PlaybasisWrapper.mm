@@ -46,40 +46,7 @@ void PopulateData(pbResponseType type, PBBase_Response *response, void* outData)
 		PBQuizRandom_Response* cr = (PBQuizRandom_Response*)response;
 
 		quizBasic* data = (quizBasic*)outData;
-		if (cr.randomQuiz != nil)
-		{
-			// PBQuizBasic
-			PBQuizBasic *basic = cr.randomQuiz;
-			if (CHECK_NOTNULL(basic.name))
-			{
-				data->name = MakeStringCopy([basic.name UTF8String]);
-			}
-
-			if (CHECK_NOTNULL(basic.image))
-			{
-				data->image = MakeStringCopy([basic.image UTF8String]);
-			}
-
-			if (CHECK_NOTNULL(basic.weight))
-			{
-				data->weight = MakeStringCopy([basic.weight UTF8String]);
-			}
-
-			if (CHECK_NOTNULL(basic.description_))
-			{
-				data->description_ = MakeStringCopy([basic.description_ UTF8String]);
-			}
-
-			if (CHECK_NOTNULL(basic.descriptionImage))
-			{
-				data->descriptionImage = MakeStringCopy([basic.descriptionImage UTF8String]);
-			}
-
-			if (CHECK_NOTNULL(basic.quizId))
-			{
-				data->quizId = MakeStringCopy([basic.quizId UTF8String]);
-			}
-		}
+		[Populator populateQuizBasic:data from:cr];
 	}
 	else if (type == responseType_quizDoneListByPlayer)
 	{
