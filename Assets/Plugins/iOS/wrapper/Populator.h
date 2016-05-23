@@ -25,5 +25,8 @@
 + (void) populateQuizPendingGrade:(quizPendingGrade*)outData from:(PBQuizPendingGrade*)pbData;
 + (void) populateQuizPendingGradeReward:(quizPendingGradeReward*)outData from:(PBQuizPendingGradeReward*)pbData;
 + (void) populateQuizPendingGradeRewardArray:(_array<quizPendingGradeReward>*)outData from:(NSArray*)pbArray;
++ (void) populateQuestion:(question*)outData from:(PBQuestion*)pbData;
++ (void) populateQuestionOption:(questionOption*)outData from:(PBQuestionOption*)pbData;
++ (void) populateQuestionOptionArray:(_array<questionOption>*)outData from:(NSArray*)pbArray;
 
 @end

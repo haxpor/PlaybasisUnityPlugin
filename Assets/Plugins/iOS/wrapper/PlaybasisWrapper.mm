@@ -67,60 +67,7 @@ void PopulateData(pbResponseType type, PBBase_Response *response, void* outData)
 		PBQuestion_Response* cr = (PBQuestion_Response*)response;
 
 		question* data = (question*)outData;
-		if (cr.question != nil)
-		{
-			PBQuestion *q = cr.question;
-
-			if (CHECK_NOTNULL(q.question))
-			{
-				data->question = MakeStringCopy([q.question UTF8String]);
-			}
-
-			if (CHECK_NOTNULL(q.questionImage))
-			{
-				data->question = MakeStringCopy([q.questionImage UTF8String]);
-			}
-
-			if (q.options != nil && q.options.options != nil)
-			{
-				if ([q.options.options count] > 0)
-				{
-					const int itemsCount = [q.options.options count];
-					questionOption *qo = new questionOption[itemsCount];
-					int i=0;
-
-					for (PBQuestionOption *option in q.options.options)
-					{
-						if (CHECK_NOTNULL(option.option))
-						{
-							qo[i].option = MakeStringCopy([option.option UTF8String]);
-						}
-
-						if (CHECK_NOTNULL(option.optionImage))
-						{
-							qo[i].optionImage = MakeStringCopy([option.optionImage UTF8String]);
-						}
-
-						if (CHECK_NOTNULL(option.optionId))
-						{
-							qo[i].optionId = MakeStringCopy([option.optionId UTF8String]);
-						}
-
-						i++;
-					}
-
-					data->optionArray.data = qo;
-					data->optionArray.count = i;
-				}
-			}
-
-			data->index = q.index;
-			data->total = q.total;
-			if (CHECK_NOTNULL(q.questionId))
-			{
-				data->questionId = MakeStringCopy([q.questionId UTF8String]);
-			}
-		}
+		[Populator populateQuestion:data from:cr.question];
 	}
 	else if (type == responseType_questionAnswered)
 	{

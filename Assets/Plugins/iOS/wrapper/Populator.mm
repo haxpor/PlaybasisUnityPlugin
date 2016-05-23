@@ -347,4 +347,46 @@
     outData->count = i;
 }
 
++ (void) populateQuestion:(question*)outData from:(PBQuestion*)pbData
+{
+    RETURNIFNULL(pbData)
+
+    COPYSTRING(pbData.question, outData->question)
+    COPYSTRING(pbData.questionImage, outData->questionImage)
+
+    // array of questionOption
+    [Populator populateQuestionOptionArray:&outData->optionArray from:pbData.options.options];
+
+    outData->index = pbData.index;
+    outData->total = pbData.total;
+    COPYSTRING(pbData.questionId, outData->questionId)
+}
+
++ (void) populateQuestionOption:(questionOption*)outData from:(PBQuestionOption*)pbData
+{
+    RETURNIFNULL(pbData)
+
+    COPYSTRING(pbData.option, outData->option)
+    COPYSTRING(pbData.optionImage, outData->optionImage)
+    COPYSTRING(pbData.optionId, outData->optionId)
+}
+
++ (void) populateQuestionOptionArray:(_array<questionOption>*)outData from:(NSArray*)pbArray
+{
+    RETURNIFNULL(pbArray)
+
+    questionOption* items = new questionOption[[pbArray count]];
+    int i=0;
+
+    for (PBQuestionOption *c in pbArray)
+    {
+        // questionOption
+        [Populator populateQuestionOption:&items[i] from:c];
+        i++;
+    }
+
+    outData->data = items;
+    outData->count = i;
+}
+
 @end
