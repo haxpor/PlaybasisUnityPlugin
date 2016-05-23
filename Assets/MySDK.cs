@@ -100,6 +100,9 @@ public class PlaybasisWrapper : MonoBehaviour {
 	[DllImport ("__Internal")]
 	private static extern void _quizQuestion(string quizId, string playerId, OnDataResultDelegate callback);
 
+	[DllImport ("__Internal")]
+	private static extern void _quizAnswer(string quizId, string optionId, string playerId, string questionId, OnDataResultDelegate callback);
+
 	/*
 		Structs
 		- Arrays
@@ -152,6 +155,16 @@ public class PlaybasisWrapper : MonoBehaviour {
 		public questionOptionWr[] data;
 		public int count;
 	};
+	[StructLayout(LayoutKind.Sequential)]
+	public struct questionAnsweredOptionArrayWr {
+		public questionAnsweredOptionWr[] data;
+		public int count;
+	}
+	[StructLayout(LayoutKind.Sequential)]
+	public struct questionAnsweredGradeDoneArrayWr {
+		public questionAnsweredGradeDoneWr[] data;
+		public int count;
+	}
 
 	/*
 		Structs
@@ -319,6 +332,41 @@ public class PlaybasisWrapper : MonoBehaviour {
 		public string questionId;
 	};
 
+	[StructLayout(LayoutKind.Sequential)]
+	public struct questionAnsweredGradeDoneWr {
+		public string gradeId;
+		public string start;
+		public string end;
+		public string grade;
+		public string rank;
+		public string rankImage;
+		public uint score;
+		public string maxScore;
+		public uint totalScore;
+		public uint totalMaxScore;
+	}
+
+	[StructLayout(LayoutKind.Sequential)]
+	public struct questionAnsweredOptionWr {
+		public string option;
+		public string score;
+		public string explanation;
+		public string optionImage;
+		public string optionId;
+	}
+
+	[StructLayout(LayoutKind.Sequential)]
+	public struct questionAnsweredWr {
+		public questionAnsweredOptionArrayWr optionArray;
+		public uint score;
+		public string maxScore;
+		public string explanation;
+		public uint totalScore;
+		public uint totalMaxScore;
+		public questionAnsweredGradeDoneArrayWr gradeDoneArray;
+		public gradeDoneRewardArrayWr gradeDoneRewardArray;
+	}
+
 	/*
 		All implementation of api methods are non-blocking call, but synchronized call for Playbasis Platform.
 	*/
@@ -400,6 +448,11 @@ public class PlaybasisWrapper : MonoBehaviour {
 	public static void quizQuestion(string quizId, string playerId, OnDataResultDelegate callback)
 	{
 		_quizQuestion(quizId, playerId, callback);
+	}
+
+	public static void quizAnswer(string quizId, string optionId, string playerId, string questionId, OnDataResultDelegate callback)
+	{
+		_quizAnswer(quizId, optionId, playerId, questionId, callback);
 	}
 
 	#endif

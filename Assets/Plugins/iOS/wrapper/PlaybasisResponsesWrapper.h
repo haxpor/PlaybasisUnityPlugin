@@ -286,6 +286,37 @@ typedef struct _question {
 	char* questionId;
 } question;
 
+typedef struct _questionAnsweredGradedone {
+	char* gradeId;
+	char* start;
+	char* end;
+	char* grade;
+	char* rank;
+	char* rankImage;
+	unsigned int score;
+	char* maxScore;
+	unsigned int totalScore;
+	unsigned int totalMaxScore;
+} questionAnsweredGradeDone;
+
+typedef struct _questionAnsweredOption {
+	char* option;
+	char* score;
+	char* explanation;
+	char* optionImage;
+	char* optionId;
+} questionAnsweredOption;
+
+typedef struct _questionAnswered {
+	_array<questionAnsweredOption> optionArray;
+	unsigned int score;
+	char* maxScore;
+	char* explanation;
+	unsigned int totalScore;
+	unsigned int totalMaxScore;
+	_array<questionAnsweredGradeDone> gradeDoneArray;
+	_array<gradeDoneReward> gradeDoneRewardArray;
+} questionAnswered;
 
 #ifdef __cplusplus
 }

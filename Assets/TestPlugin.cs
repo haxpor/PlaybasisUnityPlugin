@@ -337,5 +337,21 @@ public class TestPlugin : MonoBehaviour {
 		}
 	}
 
+	// quizAnswer()
+	[MonoPInvokeCallback(typeof(PlaybasisWrapper.OnDataResultDelegate))]
+	private static void OnQuizAnswerResult(IntPtr result, int errorCode) 
+	{
+		if (result != IntPtr.Zero)
+		{
+			PlaybasisWrapper.questionAnsweredWr q = (PlaybasisWrapper.questionAnsweredWr)Marshal.PtrToStructure(result, typeof(PlaybasisWrapper.questionAnsweredWr));
+
+			Debug.Log("quizAnswer success");
+		}
+		else
+		{
+			Debug.Log("quizAnswer api error with code " + errorCode);
+		}
+	}
+
 	#endif
 }

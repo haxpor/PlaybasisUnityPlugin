@@ -630,6 +630,10 @@ void PopulateData(pbResponseType type, PBBase_Response *response, void* outData)
 			}
 		}
 	}
+	else if (type == responseType_questionAnswered)
+	{
+		// TODO: Add this...
+	}
 }
 
 /*
@@ -966,6 +970,29 @@ void _quizQuestion(const char* quizId, const char* playerId, OnDataResult callba
 		{
 			question data;
 			PopulateData(responseType_questionFromQuiz, q, &data);
+
+			if (callback)
+			{
+				callback((void*)&data, -1);
+			}
+		}
+		else
+		{
+			if (callback)
+			{
+				callback(nil, (int)error.code);
+			}
+		}
+	}];
+}
+
+void _quizAnswer(const char* quizId, const char* optionId, const char* playerId, const char* questionId, OnDataResult callback)
+{
+	[[Playbasis sharedPB] quizAnswerAsync:CreateNSString(quizId) optionId:CreateNSString(optionId) forPlayer:CreateNSString(playerId) ofQuestionId:CreateNSString(questionId) withBlock:^(PBQuestionAnswered_Response * q, NSURL *url, NSError *error) {
+		if (error == nil)
+		{
+			questionAnswered data;
+			PopulateData(responseType_questionAnswered, q, &data);
 
 			if (callback)
 			{

@@ -39,6 +39,7 @@ extern "C" {
 	void _quizDoneList(const char* playerId, int limit, OnDataResult callback);
 	void _quizPendingList(const char* playerId, int limit, OnDataResult callback);
 	void _quizQuestion(const char* quizId, const char* playerId, OnDataResult callback);
+	void _quizAnswer(const char* quizId, const char* optionId, const char* playerId, const char* questionId, OnDataResult callback);
 
 #ifdef __cplusplus
 }
