@@ -121,14 +121,14 @@ public class TestPlugin : MonoBehaviour {
 	{
 		// Add test code calling api here ...
 		PlaybasisWrapper.login("jontestuser", OnLoginResult);
-		//PlaybasisWrapper.playerPublic("jontestuser", OnPlayerPublicResult);
-		PlaybasisWrapper.player("jontestuser", OnPlayerResult);
+		PlaybasisWrapper.playerPublic("jontestuser", OnPlayerPublicResult);
+		/*PlaybasisWrapper.player("jontestuser", OnPlayerResult);
 		PlaybasisWrapper.pointOfPlayer("jontestuser", "point", OnPointOfPlayerResult);
 		PlaybasisWrapper.quizList(OnQuizListResult);
 		PlaybasisWrapper.quizListOfPlayer("jontestuser", OnQuizListOfPlayerResult);
 		PlaybasisWrapper.quizRandom("jontestuser", OnQuizRandomResult);
 		PlaybasisWrapper.quizDoneList("jontestuser", 20, OnQuizDoneListResult);
-		PlaybasisWrapper.quizPendingList("jontestuser", 20, OnQuizPendingListResult);
+		PlaybasisWrapper.quizPendingList("jontestuser", 20, OnQuizPendingListResult);*/
 
 		//PlaybasisWrapper.logout("jontestuser", OnLogoutResult);
 	}

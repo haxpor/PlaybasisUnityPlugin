@@ -1,27 +1,7 @@
 ﻿#import "PlaybasisWrapper.h"
 #import "Playbasis.h" // your actual iOS library header
-
-#define CHECK_NOTNULL(x) x != nil && x != (id)[NSNull null]
-
-// Converts C style string to NSString
-NSString* CreateNSString (const char* string)
-{
-	if (string)
-		return [NSString stringWithUTF8String: string];
-	else
-		return [NSString stringWithUTF8String: ""];
-}
-
-// Helper method to create C string copy
-char* MakeStringCopy (const char* string)
-{
-	if (string == NULL)
-		return NULL;
-	
-	char* res = (char*)malloc(strlen(string) + 1);
-	strcpy(res, string);
-	return res;
-}
+#import "Util.h"
+#import "Populator.h"
 
 // Populate struct data based on input response type
 void PopulateData(pbResponseType type, PBBase_Response *response, void* outData)
@@ -31,35 +11,7 @@ void PopulateData(pbResponseType type, PBBase_Response *response, void* outData)
 		PBPlayerPublic_Response* playerResponse = (PBPlayerPublic_Response*)response;
 
 		playerPublic* data = (playerPublic*)outData;
-        if (playerResponse.playerBasic.image != nil &&
-            playerResponse.playerBasic.image != (id)[NSNull null])
-            data->basic.image = MakeStringCopy([playerResponse.playerBasic.image UTF8String]);
-        
-        if (playerResponse.playerBasic.userName != nil &&
-            playerResponse.playerBasic.userName != (id)[NSNull null])
-            data->basic.userName = MakeStringCopy([playerResponse.playerBasic.userName UTF8String]);
-        
-        data->basic.exp = playerResponse.playerBasic.exp;
-        data->basic.level = playerResponse.playerBasic.level;
-        
-        if (playerResponse.playerBasic.firstName != nil &&
-            playerResponse.playerBasic.firstName != (id)[NSNull null])
-            data->basic.firstName = MakeStringCopy([playerResponse.playerBasic.firstName UTF8String]);
-        
-        if (playerResponse.playerBasic.lastName != nil &&
-            playerResponse.playerBasic.lastName != (id)[NSNull null])
-            data->basic.lastName = MakeStringCopy([playerResponse.playerBasic.lastName UTF8String]);
-        
-        data->basic.gender = playerResponse.playerBasic.gender;
-        
-        if (playerResponse.playerBasic.clPlayerId != nil &&
-            playerResponse.playerBasic.clPlayerId != (id)[NSNull null])
-            data->basic.clPlayerId = MakeStringCopy([playerResponse.playerBasic.clPlayerId UTF8String]);
-        
-
-		data->registered = [playerResponse.registered timeIntervalSince1970];
-		data->lastLogin = [playerResponse.lastLogin timeIntervalSince1970];
-		data->lastLogout = [playerResponse.lastLogout timeIntervalSince1970];
+		[Populator populatePlayerPublic:data from:playerResponse];
 	}
 	else if (type == responseType_player)
 	{
