@@ -35,6 +35,7 @@ extern "C" {
 	void _quizList(OnDataResult callback);
 	void _quizListOfPlayer(const char* playerId, OnDataResult callback);
 	void _quizDetail(const char* quizId, const char* playerId, OnDataResult callback);
+	void _quizRandom(const char* playerId, OnDataResult callback);
 
 #ifdef __cplusplus
 }

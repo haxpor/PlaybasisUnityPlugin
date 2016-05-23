@@ -88,6 +88,9 @@ public class PlaybasisWrapper : MonoBehaviour {
 	[DllImport ("__Internal")]
 	private static extern void _quizDetail(string quizId, string playerId, OnDataResultDelegate callback);
 
+	[DllImport ("__Internal")]
+	private static extern void _quizRandom(string playerId, OnDataResultDelegate callback);
+
 	/*
 		Structs
 		- Arrays
@@ -271,6 +274,11 @@ public class PlaybasisWrapper : MonoBehaviour {
 	public static void quizDetail(string quizId, string playerId, OnDataResultDelegate callback)
 	{
 		_quizDetail(quizId, playerId, callback);
+	}
+
+	public static void quizRandom(string playerId, OnDataResultDelegate callback)
+	{
+		_quizRandom(playerId, callback);
 	}
 
 	#endif

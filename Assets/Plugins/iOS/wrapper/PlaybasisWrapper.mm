@@ -180,7 +180,7 @@ void PopulateData(pbResponseType type, PBBase_Response *response, void* outData)
 		{
 			if (CHECK_NOTNULL(cr.quiz.basic))
 			{
-				// PBQuizBasic
+				// quizBasic
 				PBQuizBasic *basic = cr.quiz.basic;
 				if (CHECK_NOTNULL(basic.name))
 				{
@@ -312,6 +312,46 @@ void PopulateData(pbResponseType type, PBBase_Response *response, void* outData)
 					data->gradeArray.data = (grade*)gs;
 					data->gradeArray.count = i;
 				}
+			}
+		}
+	}
+	else if (type == responseType_quizRandom)
+	{
+		PBQuizRandom_Response* cr = (PBQuizRandom_Response*)response;
+
+		quizBasic* data = (quizBasic*)outData;
+		if (cr.randomQuiz != nil)
+		{
+			// PBQuizBasic
+			PBQuizBasic *basic = cr.randomQuiz;
+			if (CHECK_NOTNULL(basic.name))
+			{
+				data->name = MakeStringCopy([basic.name UTF8String]);
+			}
+
+			if (CHECK_NOTNULL(basic.image))
+			{
+				data->image = MakeStringCopy([basic.image UTF8String]);
+			}
+
+			if (CHECK_NOTNULL(basic.weight))
+			{
+				data->weight = MakeStringCopy([basic.weight UTF8String]);
+			}
+
+			if (CHECK_NOTNULL(basic.description_))
+			{
+				data->description_ = MakeStringCopy([basic.description_ UTF8String]);
+			}
+
+			if (CHECK_NOTNULL(basic.descriptionImage))
+			{
+				data->descriptionImage = MakeStringCopy([basic.descriptionImage UTF8String]);
+			}
+
+			if (CHECK_NOTNULL(basic.quizId))
+			{
+				data->quizId = MakeStringCopy([basic.quizId UTF8String]);
 			}
 		}
 	}
@@ -559,6 +599,29 @@ void _quizDetail(const char* quizId, const char* playerId, OnDataResult callback
 		{
 			quiz data;
 			PopulateData(responseType_quizDetail, quizDetail, &data);
+
+			if (callback)
+			{
+				callback((void*)&data, -1);
+			}
+		}
+		else
+		{
+			if (callback)
+			{
+				callback(nil, (int)error.code);
+			}
+		}
+	}];
+}
+
+void _quizRandom(const char* playerId, OnDataResult callback)
+{
+	[[Playbasis sharedPB] quizRandomForPlayerAsync:CreateNSString(playerId) withBlock:^(PBQuizRandom_Response * quizRandom, NSURL *url, NSError *error) {
+		if (error == nil)
+		{
+			quizBasic data;
+			PopulateData(responseType_quizRandom, quizRandom, &data);
 
 			if (callback)
 			{
