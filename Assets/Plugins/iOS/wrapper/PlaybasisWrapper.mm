@@ -39,14 +39,14 @@ void PopulateData(pbResponseType type, PBBase_Response *response, void* outData)
 		PBQuizDetail_Response* cr = (PBQuizDetail_Response*)response;
 
 		quiz* data = (quiz*)outData;
-		[Populator populateQuiz:data from:cr];
+		[Populator populateQuiz:data from:cr.quiz];
 	}
 	else if (type == responseType_quizRandom)
 	{
 		PBQuizRandom_Response* cr = (PBQuizRandom_Response*)response;
 
 		quizBasic* data = (quizBasic*)outData;
-		[Populator populateQuizBasic:data from:cr];
+		[Populator populateQuizBasic:data from:cr.randomQuiz];
 	}
 	else if (type == responseType_quizDoneListByPlayer)
 	{

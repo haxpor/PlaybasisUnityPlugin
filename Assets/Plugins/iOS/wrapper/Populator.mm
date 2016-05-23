@@ -148,16 +148,13 @@
 
     for (PBGrade *c in pbArray)
     {
-        COPYSTRING(c.gradeId, items[i].gradeId)
-        COPYSTRING(c.start, items[i].start)
-        COPYSTRING(c.end, items[i].end)
-        COPYSTRING(c.grade, items[i].grade)
-        COPYSTRING(c.rank, items[i].rank)
-        COPYSTRING(c.rankImage, items[i].rank)
-
-        // gradeRewards
-        [Populator populateGradeRewards:&items[i].rewards from:c.rewards];
+        // grade
+        [Populator populateGrade:&items[i] from:c];
+        i++;
     }
+
+    outData->data = items;
+    outData->count = i;
 }
 
 + (void) populateGradeRewards:(gradeRewards*)outData from:(PBGradeRewards*)pbData
@@ -188,13 +185,54 @@
 
     for (PBGradeRewardCustom *c in pbArray)
     {
-        COPYSTRING(c.customId, items[i].customId)
-        COPYSTRING(c.customValue, items[i].customValue)
+        // gradeRewardCustom
+        [Populator populateGradeRewardCustom:&items[i] from:c];
         i++;
     }
 
     outData->data = items;
     outData->count = i;
+}
+
++ (void) populateQuizDone:(quizDone*)outData from:(PBQuizDone*)pbData
+{
+    RETURNIFNULL(pbData)
+
+    outData->value = pbData.value;
+
+    // gradeDone
+    [Populator populateGradeDone:&outData->gradeDone from:pbData.grade];
+
+    outData->totalCompletedQuestion = pbData.totalCompletedQuestion;
+    COPYSTRING(pbData.quizId, outData->quizId)
+}
+
++ (void) populateQuizDoneArray:(_array<quizDone>*)outData from:(NSArray*)pbArray
+{
+    RETURNIFNULL(pbArray)
+
+    quizDone* items = new quizDone[[pbArray count]];
+    int i=0;
+
+    for (PBQuizDone *c in pbArray)
+    {
+        // quizDone
+        [Populator populateQuizDone:&items[i] from:c];
+        i++;
+    }
+
+    outData->data = items;
+    outData->count = i;
+}
+
++ (void) populateGradeDone:(gradeDone*)outData from:(PBGradeDone*)pbData
+{
+
+}
+
++ (void) populateGradeDoneReward:(gradeDoneReward*)outData from:(PBGradeDoneReward*)pbData
+{
+
 }
 
 @end
