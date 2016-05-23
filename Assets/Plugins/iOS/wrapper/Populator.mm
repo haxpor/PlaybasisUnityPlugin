@@ -227,12 +227,50 @@
 
 + (void) populateGradeDone:(gradeDone*)outData from:(PBGradeDone*)pbData
 {
+    RETURNIFNULL(pbData)
 
+    COPYSTRING(pbData.gradeId, outData->gradeId)
+    COPYSTRING(pbData.start, outData->start)
+    COPYSTRING(pbData.end, outData->end)
+    COPYSTRING(pbData.grade, outData->grade)
+    COPYSTRING(pbData.rank, outData->rank)
+    COPYSTRING(pbData.rankImage, outData->rankImage)
+
+    // gradeDoneReward
+    [Populator populateGradeDoneRewardArray:&outData->rewardArray from:pbData.rewards.gradeDoneRewards];
+
+    outData->score = pbData.score;
+    COPYSTRING(pbData.maxScore, outData->maxScore)
+    outData->totalScore = pbData.totalScore;
+    outData->totalMaxScore = pbData.totalMaxScore;
 }
 
 + (void) populateGradeDoneReward:(gradeDoneReward*)outData from:(PBGradeDoneReward*)pbData
 {
+    RETURNIFNULL(pbData)
 
+    COPYSTRING(pbData.eventType, outData->eventType)
+    COPYSTRING(pbData.rewardType, outData->rewardType)
+    COPYSTRING(pbData.rewardId, outData->rewardId)
+    COPYSTRING(pbData.value, outData->value)
+}
+
++ (void) populateGradeDoneRewardArray:(_array<gradeDoneReward>*)outData from:(NSArray*)pbArray
+{
+    RETURNIFNULL(pbArray)
+
+    gradeDoneReward* items = new gradeDoneReward[[pbArray count]];
+    int i=0;
+
+    for (PBGradeDoneReward *c in pbArray)
+    {
+        // gradeDoneReward
+        [Populator populateGradeDoneReward:&items[i] from:c];
+        i++;
+    }
+
+    outData->data = items;
+    outData->count = i;
 }
 
 @end

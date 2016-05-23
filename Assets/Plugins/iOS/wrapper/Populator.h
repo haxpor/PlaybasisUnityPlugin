@@ -19,5 +19,6 @@
 + (void) populateQuizDoneArray:(_array<quizDone>*)outData from:(NSArray*)pbArray;
 + (void) populateGradeDone:(gradeDone*)outData from:(PBGradeDone*)pbData;
 + (void) populateGradeDoneReward:(gradeDoneReward*)outData from:(PBGradeDoneReward*)pbData;
++ (void) populateGradeDoneRewardArray:(_array<gradeDoneReward>*)outData from:(NSArray*)pbArray;
 
 @end
