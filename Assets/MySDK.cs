@@ -91,6 +91,9 @@ public class PlaybasisWrapper : MonoBehaviour {
 	[DllImport ("__Internal")]
 	private static extern void _quizRandom(string playerId, OnDataResultDelegate callback);
 
+	[DllImport ("__Internal")]
+	private static extern void _quizDone(string playerId, OnDataResultDelegate callback);
+
 	/*
 		Structs
 		- Arrays
@@ -116,6 +119,16 @@ public class PlaybasisWrapper : MonoBehaviour {
 	[StructLayout(LayoutKind.Sequential)]
 	public struct gradeRewardCustomArrayWr {
 		public gradeRewardCustomWr[] data;
+		public int count;
+	};
+	[StructLayout(LayoutKind.Sequential)]
+	public struct quizDoneListWr {
+		public quizDoneWr[] data;
+		public int count;
+	};
+	[StructLayout(LayoutKind.Sequential)]
+	public struct gradeDoneRewardArrayWr {
+		public gradeDoneRewardWr[] data;
 		public int count;
 	};
 
@@ -213,6 +226,35 @@ public class PlaybasisWrapper : MonoBehaviour {
 		public quizBasicArrayWr quizBasicArray;
 	};
 
+	[StructLayout(LayoutKind.Sequential)]
+	public struct gradeDoneRewardWr {
+		public string eventType;
+		public string rewardType;
+		public string rewardId;
+		public string value;
+	};
+
+	[StructLayout(LayoutKind.Sequential)]
+	public struct gradeDoneWr {
+		public string gradeId;
+		public string start;
+		public string end;
+		public string grade;
+		public string rank;
+		public string rankImage;
+		public gradeDoneRewardArrayWr rewardArray;
+		public uint score;
+		public string maxScore;
+		public uint totalScore;
+		public uint totalMaxScore;
+	};
+
+	[StructLayout(LayoutKind.Sequential)]
+	public struct quizDoneWr {
+		public uint value;
+		public gradeDoneWr gradeDone;
+	};
+
 	/*
 		All implementation of api methods are non-blocking call, but synchronized call for Playbasis Platform.
 	*/
@@ -279,6 +321,11 @@ public class PlaybasisWrapper : MonoBehaviour {
 	public static void quizRandom(string playerId, OnDataResultDelegate callback)
 	{
 		_quizRandom(playerId, callback);
+	}
+
+	public static void quizDone(string playerId, OnDataResultDelegate callback)
+	{
+		_quizDone(playerId, callback);
 	}
 
 	#endif

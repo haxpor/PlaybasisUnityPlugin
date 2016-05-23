@@ -172,9 +172,78 @@ typedef struct _quiz {
 	unsigned int totalQuestion;
 } quiz;
 
+typedef struct _gradeDoneReward {
+	char* eventType;
+	char* rewardType;
+	char* rewardId;
+	char* value;
+
+	~_gradeDoneReward()
+	{
+		if (eventType)
+			free(eventType);
+		if (rewardType)
+			free(rewardType);
+		if (rewardId)
+			free(rewardId);
+		if (value)
+			free(value);
+	}
+} gradeDoneReward;
+
+typedef struct _gradeDone {
+	char* gradeId;
+	char* start;
+	char* end;
+	char* grade;
+	char* rank;
+	char* rankImage;
+	_array<gradeDoneReward> rewardArray;
+	unsigned int score;
+	char* maxScore;
+	unsigned int totalScore;
+	unsigned int totalMaxScore;
+
+	~_gradeDone()
+	{
+		if (gradeId)
+			free(gradeId);
+		if (start)
+			free(start);
+		if (end)
+			free(end);
+		if (grade)
+			free(grade);
+		if (rank)
+			free(rank);
+		if (rankImage)
+			free(rankImage);
+		if (maxScore)
+			free(maxScore);
+	}
+} gradeDone;
+
+typedef struct _quizDone {
+	unsigned int value;
+	gradeDone gradeDone;
+	unsigned int totalCompletedQuestion;
+	char* quizId;
+
+	~_quizDone()
+	{
+		if (quizId)
+			free(quizId);
+	}
+} quizDone;
+
+typedef struct _quizDoneList {
+	_array<quizDone> quizDoneArray;
+} quizDoneList;
+
 typedef struct _quizList {
 	_array<quizBasic> quizBasicArray;
 } quizList;
+
 
 #ifdef __cplusplus
 }

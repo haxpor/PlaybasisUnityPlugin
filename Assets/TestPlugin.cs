@@ -127,6 +127,7 @@ public class TestPlugin : MonoBehaviour {
 		PlaybasisWrapper.quizList(OnQuizListResult);
 		PlaybasisWrapper.quizListOfPlayer("jontestuser", OnQuizListOfPlayerResult);
 		PlaybasisWrapper.quizRandom("jontestuser", OnQuizRandomResult);
+		PlaybasisWrapper.quizDone("jontestuser", OnQuizDoneResult);
 
 		//PlaybasisWrapper.logout("jontestuser", OnLogoutResult);
 	}
@@ -284,6 +285,22 @@ public class TestPlugin : MonoBehaviour {
 		else
 		{
 			Debug.Log("quizRandom api error with code " + errorCode);
+		}
+	}
+
+	// quizDone()
+	[MonoPInvokeCallback(typeof(PlaybasisWrapper.OnDataResultDelegate))]
+	private static void OnQuizDoneResult(IntPtr result, int errorCode) 
+	{
+		if (result != IntPtr.Zero)
+		{
+			PlaybasisWrapper.quizDoneListWr q = (PlaybasisWrapper.quizDoneListWr)Marshal.PtrToStructure(result, typeof(PlaybasisWrapper.quizDoneListWr));
+
+			Debug.Log("quizDone success");
+		}
+		else
+		{
+			Debug.Log("quizDone api error with code " + errorCode);
 		}
 	}
 
