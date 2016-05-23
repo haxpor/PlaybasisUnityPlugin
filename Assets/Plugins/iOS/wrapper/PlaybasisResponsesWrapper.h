@@ -271,6 +271,21 @@ typedef struct _quizPendingList {
 	_array<quizPending> quizPendingArray;
 } quizPendingList;
 
+typedef struct _questionOption {
+	char* option;
+	char* optionImage;
+	char* optionId;
+} questionOption;
+
+typedef struct _question {
+	char* question;
+	char* questionImage;
+	_array<questionOption> optionArray;
+	unsigned int index;
+	unsigned int total;
+	char* questionId;
+} question;
+
 
 #ifdef __cplusplus
 }

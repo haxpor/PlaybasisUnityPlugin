@@ -305,7 +305,7 @@ public class TestPlugin : MonoBehaviour {
 		}
 	}
 
-	// quiz()
+	// quizPendingList()
 	[MonoPInvokeCallback(typeof(PlaybasisWrapper.OnDataResultDelegate))]
 	private static void OnQuizPendingListResult(IntPtr result, int errorCode) 
 	{
@@ -318,6 +318,22 @@ public class TestPlugin : MonoBehaviour {
 		else
 		{
 			Debug.Log("quizPendingList api error with code " + errorCode);
+		}
+	}
+
+	// quizQuestion()
+	[MonoPInvokeCallback(typeof(PlaybasisWrapper.OnDataResultDelegate))]
+	private static void OnQuizQuestionResult(IntPtr result, int errorCode) 
+	{
+		if (result != IntPtr.Zero)
+		{
+			PlaybasisWrapper.questionWr q = (PlaybasisWrapper.questionWr)Marshal.PtrToStructure(result, typeof(PlaybasisWrapper.questionWr));
+
+			Debug.Log("quizQuestion success");
+		}
+		else
+		{
+			Debug.Log("quizQuestion api error with code " + errorCode);
 		}
 	}
 

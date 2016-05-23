@@ -97,6 +97,9 @@ public class PlaybasisWrapper : MonoBehaviour {
 	[DllImport ("__Internal")]
 	private static extern void _quizPendingList(string playerId, int limit, OnDataResultDelegate callback);
 
+	[DllImport ("__Internal")]
+	private static extern void _quizQuestion(string quizId, string playerId, OnDataResultDelegate callback);
+
 	/*
 		Structs
 		- Arrays
@@ -143,7 +146,12 @@ public class PlaybasisWrapper : MonoBehaviour {
 	public struct quizPendingListWr {
 		public quizPendingWr[] data;
 		public int count;
-	}
+	};
+	[StructLayout(LayoutKind.Sequential)]
+	public struct questionOptionArrayWr {
+		public questionOptionWr[] data;
+		public int count;
+	};
 
 	/*
 		Structs
@@ -294,6 +302,23 @@ public class PlaybasisWrapper : MonoBehaviour {
 		public string quizId;
 	};
 
+	[StructLayout(LayoutKind.Sequential)]
+	public struct questionOptionWr {
+		public string option;
+		public string optionImage;
+		public string optionId;
+	};
+
+	[StructLayout(LayoutKind.Sequential)]
+	public struct questionWr {
+		public string question;
+		public string questionImage;
+		public questionOptionArrayWr optionArray;
+		public uint index;
+		public uint total;
+		public string questionId;
+	};
+
 	/*
 		All implementation of api methods are non-blocking call, but synchronized call for Playbasis Platform.
 	*/
@@ -370,6 +395,11 @@ public class PlaybasisWrapper : MonoBehaviour {
 	public static void quizPendingList(string playerId, int limit, OnDataResultDelegate callback)
 	{
 		_quizPendingList(playerId, limit, callback);
+	}
+
+	public static void quizQuestion(string quizId, string playerId, OnDataResultDelegate callback)
+	{
+		_quizQuestion(quizId, playerId, callback);
 	}
 
 	#endif
